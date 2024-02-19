@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+
+#Contenedor de EATITALL
+    eatitall-docker-dev:
+        container_name: eatitall-docker-dev
+        build: ./eatitall_scripts/eatitall_scripts/docker_build
+        user: root             
+        volumes:
+            - ./eatitall_scripts:/home/eatitall_scripts              
+        ports:
+            - "4000:4000"
+            - "8081:8081"
+            - "8888:8888"
+        command: jupyter notebook --notebook-dir=/home/eatitall_scripts --ip 0.0.0.0 --no-browser --allow-root --NotebookApp.token="eatitall" --NotebookApp.allow_origin="\*"            
+        networks:
+          - elastic
+        #command: "python -u /home/runner/root/sofiacore/sofiacore/sofia/controller/main_principal.py"
+         
+####### ELASTICSEARCH
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.10.0
+        container_name: elasticsearch
+        environment:
+          - discovery.type=single-node
+        ports:
+          - 9200:9200
+        volumes:
+          - elasticsearch-data:/usr/share/elasticsearch/data
+        networks:
+          - elastic
+    kibana:
+      image: docker.elastic.co/kibana/kibana:7.10.0
+      container_name: kibana
+      ports:
+        - 5601:5601
+      environment:
+        ELASTICSEARCH_URL: http://elasticsearch:9200
+      networks:
+        - elastic
+networks:
+  elastic:
+    driver: bridge
+volumes:
+  elasticsearch-data:
+
+
+  
+
+
