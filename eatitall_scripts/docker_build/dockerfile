@@ -1,0 +1,39 @@
+FROM python:3.8-slim-buster
+# FROM python:3.13.0a3-bookworm
+# Instala distutils
+# deploying as non-root user
+
+ARG USERNAME=root
+ARG ENVNAME=pctobs
+USER $USERNAME
+WORKDIR /home/$USERNAME 
+
+# creating the virtual environment
+RUN python -m venv $ENVNAME
+	
+# activating virtual environment (note that source venv_path\bin will no work)
+ENV PATH="/home/$USERNAME/$ENVNAME/bin:${PATH}"
+
+# install generic dependencies (tensorflow, transformers, Jupyter, etc.)
+ENV TRANSFORMERS_CACHE=/workspaces/transformers/cache
+RUN python -m pip install --upgrade pip 
+# run pip with no other command in case the later fails it not spoils pip
+COPY ./pip-requirements.txt /tmp/
+RUN apt-get update && apt-get install -y python3-distutils && rm -rf /var/lib/apt/lists/*
+RUN pip --disable-pip-version-check --no-cache-dir install -r /tmp/pip-requirements.txt
+RUN rm -rf /tmp/pip-tmp
+
+
+# Install Jupyter (to run notebooks locally)
+RUN pip install --no-cache-dir jupyter matplotlib
+# Pin ipykernel and nbformat; see https://github.com/ipython/ipykernel/issues/422
+RUN pip install --no-cache-dir jupyter_http_over_ws ipykernel==5.1.1 nbformat==4.4.0
+RUN jupyter serverextension enable --py jupyter_http_over_ws
+RUN python3 -m ipykernel.kernelspec --user
+
+
+# # install token as it have specific requirements (gcc)
+USER $USERNAME
+# RUN pip --disable-pip-version-check --no-cache-dir install token==1.8.6
+# RUN pip uninstall numpy -y
+# RUN pip install numpy==1.18.5

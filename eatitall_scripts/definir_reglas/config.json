@@ -1,0 +1,98 @@
+{
+    "variables": {
+        "imc": {"siglas dataset":"imc",
+                "siglas alternativas":[],
+                "nombre completo español":"ínidice de masa corporal",
+                "nombre completo inglés":"body mass index"},
+        "tas": {"siglas dataset":"tas",
+                "siglas alternativas":[],
+                "nombre completo español":"tensión/presión arterial sistólica",
+                "nombre completo inglés":""},
+        "tad": {"siglas dataset":"tad",
+                "siglas alternativas":[],
+                "nombre completo español":"tensión/presión arterial diastólica",
+                "nombre completo inglés":""},
+        "tg": {"siglas dataset":"tg"},
+        "hba1c": {"siglas dataset":"hba1c",
+               "siglas alternativas":["a1c"],
+               "nombre completo español":"hemoglobina glicada o glucosilada",
+               "nombre completo inglés":"fasting plasma glucose",
+               "niveles":{
+                "porcentaje":[5,6,7,8,9,10,11,12],
+                "mg_dL":[97,126,154,183,212,240,269.298],
+                "mg_dL_intervalos":["76-120","100-152","123-185","147-217","170-249","193-282",
+                                    "217-314","240-347"],
+                "mmol_L":[5.4,7.0,8.6,10.2,11.8,13.4,14.9,16.5],
+                "mmol_L_intervalos":["4.2-6.7","5.5-8.5","6.8-10.3","8.1-12.1","9.4-13.9","10.7-15.7",
+                                     "12.0-17.5","13.3-19.3"]
+               }},
+        "fg": {"siglas dataset":"fg",
+               "siglas alternativas":["fpg","gpa","ga","glucA","gluA"],
+               "nombre completo español":"glucemia plasmática en ayunas",
+               "nombre completo inglés":"fasting plasma glucose"},
+        "pg2h_75g_ogtt": {"siglas dataset":"",
+               "siglas alternativas":["glu","gp"],
+               "nombre completo español":"glucemia plasmática",
+               "nombre completo inglés":"2-h plasma glucose (2-h PG) value during a 75-g oral glucose tolerance test (OGTT)"},       
+        "ga": {"siglas dataset":"",
+               "siglas alternativas":[],
+               "nombre completo español":"prueba de glucosa aleatoria",
+               "nombre completo inglés":"random plasma glucose"},
+        "acv": {"siglas dataset":"acv"},
+        "estatina": {"siglas dataset":"estatina"},
+        "edad": {"siglas dataset":"edad"},
+        "peso": {"siglas dataset":"peso"},
+        "talla": {"siglas dataset":"talla"}
+    },
+    "parametros": {
+        "diabetes":{
+            "hba1c_umbral_inferior":6.5,
+            "fg_umbral_inferior":126,
+            "pg2h_75g_ogtt_umbral_inferior":200,
+            "ga_umbral_inferior":200
+        },
+        "prediabetes": {
+            "imc_umbral_inferior": 25,
+            "tas_umbral_inferior": 140,
+            "tad_umbral_inferior": 90,
+            "tg_umbral_inferior": 250,
+            "hba1c_umbral_inferior": 5.7,
+            "hba1c_umbral_superior": 6.49,
+            "fg_umbral_inferior": 100,
+            "fg_umbral_superior": 125,
+            "pg2h_75g_ogtt_umbral_inferior":140,
+            "pg2h_75g_ogtt_umbral_superior":199
+        },
+        "hipertension": {
+            "tas_umbral_inferior": 130,
+            "tad_umbral_inferior": 80
+        },
+        "cardiovascular": {
+            "identificador": 1
+        },
+        "lipidos": {
+            "tg_umbral_inferior": 150
+        },
+        "estatina": {
+            "identificador": 1
+        },
+        "mayores_de_65_saludable": {
+            "fg_umbral_inferior": 80,
+            "fg_umbral_superior": 130,
+            "tas_umbral_superior": 130,
+            "tad_umbral_superior": 80
+        },
+        "mayores_de_65_compleja": {
+            "fg_umbral_inferior": 90,
+            "fg_umbral_superior": 150,
+            "tas_umbral_superior": 130,
+            "tad_umbral_superior": 80
+        },
+        "mayores_de_65_muy_compleja": {
+            "fg_umbral_inferior": 100,
+            "fg_umbral_superior": 180,
+            "tas_umbral_superior": 140,
+            "tad_umbral_superior": 90
+        }
+    }
+}
