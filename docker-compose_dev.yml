@@ -5,7 +5,7 @@ services:
 #Contenedor de EATITALL
     eatitall-docker-dev:
         container_name: eatitall-docker-dev
-        build: ./eatitall_scripts/eatitall_scripts/docker_build
+        build: ./eatitall_scripts/docker_build
         user: root             
         volumes:
             - ./eatitall_scripts:/home/eatitall_scripts              

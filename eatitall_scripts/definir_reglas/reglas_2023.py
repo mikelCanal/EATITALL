@@ -16,6 +16,7 @@ def añadir_reglas(df:pd.DataFrame,config):
     df=diabetes_mayores_de_65_y_salud_muy_compleja(df,config)
     return df
 
+# Regla extraída del documento "Estándares de atención en DIABETES GUÍA 2023" para atención primaria en las páginas 4 y 5
 def prediabetes(df:pd.DataFrame,config) -> pd.DataFrame:
     imc=config['variables']['imc']['siglas dataset']
     tas=config['variables']['tas']['siglas dataset']
@@ -49,6 +50,7 @@ def prediabetes(df:pd.DataFrame,config) -> pd.DataFrame:
             df['prediabetes'][k]=1
     return df
 
+# Regla extraída del documento "Estándares de atención en DIABETES GUÍA 2023" para atención primaria en la página 5
 def diabetes(df:pd.DataFrame) -> pd.DataFrame:
     # Si siguieramos la tabla de la página 4:
     # df['diabetes']=0 #Definimos una columna y la inicializamos con 0s. Los que la tengan serán un 1.
@@ -63,6 +65,7 @@ def diabetes(df:pd.DataFrame) -> pd.DataFrame:
     df['diabetes']=1
     return df
 
+# Regla extraída del documento "Estándares de atención en DIABETES GUÍA 2023" para atención primaria en la página 17
 def diabetes_con_cv(df:pd.DataFrame,config) -> pd.DataFrame:
     acv=config['variables']['acv']['siglas dataset']
     acv_identificador=config['parametros']['cardiovascular']['identificador']
@@ -73,10 +76,7 @@ def diabetes_con_cv(df:pd.DataFrame,config) -> pd.DataFrame:
                 df['diabetes_con_cv'][k]=1
     return df
 
-# Añadimos la regla para detectar la DIABETES con EFERMEDADES HIPERTENSIÓN
 # Regla extraída del documento "Estándares de atención en DIABETES GUÍA 2023" para atención primaria en la página 17
-
-
 def diabetes_con_hipertension(df:pd.DataFrame,config) -> pd.DataFrame:
     tas=config['variables']['tas']['siglas dataset']
     tad=config['variables']['tad']['siglas dataset']
@@ -89,9 +89,7 @@ def diabetes_con_hipertension(df:pd.DataFrame,config) -> pd.DataFrame:
                 df['diabetes_con_hipertension'][k]=1
     return df
 
-# Añadimos la regla para detectar la DIABETES con EFERMEDADES LÍPIDOS
 # Regla extraída del documento "Estándares de atención en DIABETES GUÍA 2023" para atención primaria en las páginas 18-19
-
 def diabetes_con_lipidos(df:pd.DataFrame,config):
     tg=config['variables']['tg']['siglas dataset']
     tg_umbral_inferior_lipidos=config['parametros']['lipidos']['tg_umbral_inferior']
@@ -102,9 +100,7 @@ def diabetes_con_lipidos(df:pd.DataFrame,config):
                 df['diabetes_con_lipidos'][k]=1
     return df
 
-# Añadimos la regla para detectar la DIABETES con MEDICACIÓN ESTATINAS
 # Regla de elaboración propia (ISABIAL)
-
 def diabetes_con_estatinas(df:pd.DataFrame,config) -> pd.DataFrame:
     estatina=config['variables']['estatina']['siglas dataset']
     estatina_identificador=config['parametros']['estatina']['identificador']
@@ -115,9 +111,7 @@ def diabetes_con_estatinas(df:pd.DataFrame,config) -> pd.DataFrame:
                 df['diabetes_con_estatinas'][k]=1
     return df
 
-# Añadimos la regla para detectar la DIABETES con ADULTO MAYOR
 # Regla de elaboración propia trivial
-
 def diabetes_mayores_de_65(df:pd.DataFrame,config) -> pd.DataFrame:
     edad=config['variables']['edad']['siglas dataset']
     df['diabetes_mayores_de_65']=0 #Definimos una columna y la inicializamos con 0s. Los que la tengan serán un 1.
@@ -127,9 +121,7 @@ def diabetes_mayores_de_65(df:pd.DataFrame,config) -> pd.DataFrame:
                 df['diabetes_mayores_de_65'][k]=1
     return df
 
-# Añadimos la regla para detectar la DIABETES con ADULTO MAYOR Y SALUD SALUDABLE
 # Regla extraída del documento "Estándares de atención en DIABETES GUÍA 2023" para atención primaria en la página 26
-
 def diabetes_mayores_de_65_y_salud_saludable(df:pd.DataFrame,config) -> pd.DataFrame:
     edad=config['variables']['edad']['siglas dataset']
     tas=config['variables']['tas']['siglas dataset']
@@ -149,9 +141,7 @@ def diabetes_mayores_de_65_y_salud_saludable(df:pd.DataFrame,config) -> pd.DataF
                     df['diabetes_mayores_de_65_y_salud_saludable'][k]=1
     return df
 
-# Añadimos la regla para detectar la DIABETES con ADULTO MAYOR Y SALUD COMPLEJA
 # Regla extraída del documento "Estándares de atención en DIABETES GUÍA 2023" para atención primaria en la página 26
-
 def diabetes_mayores_de_65_y_salud_compleja(df:pd.DataFrame,config) -> pd.DataFrame:
     edad=config['variables']['edad']['siglas dataset']
     tas=config['variables']['tas']['siglas dataset']
@@ -171,9 +161,7 @@ def diabetes_mayores_de_65_y_salud_compleja(df:pd.DataFrame,config) -> pd.DataFr
                     df['diabetes_mayores_de_65_y_salud_compleja'][k]=1
     return df
 
-# Añadimos la regla para detectar la DIABETES con ADULTO MAYOR Y SALUD MUY COMPLEJA
 # Regla extraída del documento "Estándares de atención en DIABETES GUÍA 2023" para atención primaria en la página 26
-
 def diabetes_mayores_de_65_y_salud_muy_compleja(df:pd.DataFrame,config) -> pd.DataFrame:
     edad=config['variables']['edad']['siglas dataset']
     tas=config['variables']['tas']['siglas dataset']

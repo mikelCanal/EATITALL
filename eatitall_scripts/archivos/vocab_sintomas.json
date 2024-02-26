@@ -1,0 +1,85 @@
+{
+    "sintomas": [
+      {
+        "nombre": "Poliuria",
+        "descripcion": "Aumento en la frecuencia y volumen de la orina."
+      },
+      {
+        "nombre": "Polidipsia",
+        "descripcion": "Sed excesiva y consumo aumentado de líquidos."
+      },
+      {
+        "nombre": "Polifagia",
+        "descripcion": "Hambre excesiva y aumento del apetito."
+      },
+      {
+        "nombre": "Fatiga",
+        "descripcion": "Sensación de cansancio y falta de energía."
+      },
+      {
+        "nombre": "Visión borrosa",
+        "descripcion": "Dificultad para enfocar y cambios en la agudeza visual."
+      },
+      {
+        "nombre": "Pérdida de peso inexplicable",
+        "descripcion": "Reducción de peso sin intentarlo, especialmente notorio en la diabetes tipo 1."
+      },
+      {
+        "nombre": "Cicatrización lenta de heridas",
+        "descripcion": "Retraso en el proceso de curación de cortes y lesiones."
+      },
+      {
+        "nombre": "Infecciones frecuentes",
+        "descripcion": "Aumento en la susceptibilidad a infecciones, especialmente de la piel, las encías, la vejiga y la vagina."
+      },
+      {
+        "nombre": "Entumecimiento u hormigueo",
+        "descripcion": "Sensaciones anormales en las manos y los pies, indicativo de neuropatía diabética."
+      },
+      {
+        "nombre": "Dolor o calambres en las piernas",
+        "descripcion": "Relacionado con la mala circulación y daño nervioso."
+      },
+      {
+        "nombre": "Piel seca e irritada",
+        "descripcion": "Cambios en la piel, incluyendo sequedad, picazón y oscurecimiento en ciertas áreas (acantosis nigricans)."
+      },
+      {
+        "nombre": "Cambios de humor",
+        "descripcion": "Irritabilidad y cambios en el estado de ánimo."
+      },
+      {
+        "nombre": "Aliento con olor a fruta",
+        "descripcion": "Resultado de la presencia de cetonas en el aliento, especialmente en casos de cetoacidosis diabética."
+      },
+      {
+        "nombre": "Náuseas y vómitos",
+        "descripcion": "Pueden ser síntomas de cetoacidosis diabética en la diabetes tipo 1."
+      },
+      {
+        "nombre": "Deshidratación",
+        "descripcion": "Resultado de la pérdida excesiva de líquidos debido a la poliuria."
+      },
+      {
+        "nombre": "Aumento de la grasa abdominal",
+        "descripcion": "Acumulación de grasa en la zona del abdomen relacionada con la resistencia a la insulina."
+      },
+      {
+        "nombre": "Hipoglucemia",
+        "descripcion": "Síntomas de bajo nivel de azúcar en sangre, incluyendo temblores, sudoración, mareos y confusión."
+      },
+      {
+        "nombre": "Hiperglucemia",
+        "descripcion": "Síntomas de alto nivel de azúcar en sangre, como fatiga, sed y micción frecuente."
+      },
+      {
+        "nombre": "Disfunción eréctil",
+        "descripcion": "Dificultad para lograr o mantener una erección, relacionada con el daño nervioso y vascular."
+      },
+      {
+        "nombre": "Infecciones por hongos",
+        "descripcion": "Incluyendo candidiasis, que puede ser más común en personas con diabetes."
+      }
+    ]
+  }
+  

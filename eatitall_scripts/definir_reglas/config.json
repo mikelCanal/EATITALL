@@ -42,7 +42,11 @@
         "estatina": {"siglas dataset":"estatina"},
         "edad": {"siglas dataset":"edad"},
         "peso": {"siglas dataset":"peso"},
-        "talla": {"siglas dataset":"talla"}
+        "talla": {"siglas dataset":"talla"},
+        "hdl_colesterol":{"siglas dataset":""},
+        "gdm":{"siglas dataset":""},
+        "vih":{"siglas dataset":""},
+        "pancreatitis":{"siglas dataset":""}
     },
     "parametros": {
         "diabetes":{
@@ -61,7 +65,11 @@
             "fg_umbral_inferior": 100,
             "fg_umbral_superior": 125,
             "pg2h_75g_ogtt_umbral_inferior":140,
-            "pg2h_75g_ogtt_umbral_superior":199
+            "pg2h_75g_ogtt_umbral_superior":199,
+            "hdl_colesterol_umbral_superior":35,
+            "gdm_identificador":1,
+            "vih_identificador":1,
+            "pancreatitis_identificador":1
         },
         "hipertension": {
             "tas_umbral_inferior": 130,
@@ -93,6 +101,7 @@
             "fg_umbral_superior": 180,
             "tas_umbral_superior": 140,
             "tad_umbral_superior": 90
-        }
+        },
+        "vih":{"identificador":1}
     }
 }

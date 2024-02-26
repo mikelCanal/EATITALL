@@ -1,0 +1,81 @@
+{
+    "pruebas_clinicas": [
+      {
+        "nombre": "Hemoglobina A1c",
+        "descripcion": "Mide el nivel promedio de glucosa en sangre en los últimos 2 a 3 meses."
+      },
+      {
+        "nombre": "Glucosa en ayunas",
+        "descripcion": "Mide los niveles de glucosa en sangre después de un ayuno de al menos 8 horas."
+      },
+      {
+        "nombre": "Prueba de tolerancia a la glucosa oral (PTGO)",
+        "descripcion": "Evalúa cómo el cuerpo procesa la glucosa después de consumir una bebida azucarada."
+      },
+      {
+        "nombre": "Test de cetonas en sangre",
+        "descripcion": "Mide la cantidad de cetonas en la sangre, útil especialmente en diabetes tipo 1 para detectar cetoacidosis."
+      },
+      {
+        "nombre": "Test de cetonas en orina",
+        "descripcion": "Detecta la presencia de cetonas en la orina."
+      },
+      {
+        "nombre": "Examen de microalbuminuria",
+        "descripcion": "Detecta la presencia de una pequeña cantidad de proteína en la orina."
+      },
+      {
+        "nombre": "Perfil de lípidos",
+        "descripcion": "Mide los niveles de colesterol y triglicéridos en la sangre."
+      },
+      {
+        "nombre": "Presión arterial",
+        "descripcion": "Monitorea la presión arterial para prevenir complicaciones cardiovasculares."
+      },
+      {
+        "nombre": "Examen de fondo de ojo",
+        "descripcion": "Revisa los daños en los vasos sanguíneos de la retina causados por la retinopatía diabética."
+      },
+      {
+        "nombre": "Prueba de función renal",
+        "descripcion": "Evalúa cómo los riñones filtran los desechos de la sangre."
+      },
+      {
+        "nombre": "Monitoreo continuo de glucosa (MCG)",
+        "descripcion": "Mide los niveles de glucosa en tiempo real a través de un dispositivo llevado en el cuerpo."
+      },
+      {
+        "nombre": "Prueba de pie diabético",
+        "descripcion": "Evalúa la presencia de neuropatía diabética en los pies y el riesgo de úlceras."
+      },
+      {
+        "nombre": "Electrocardiograma (ECG)",
+        "descripcion": "Detecta problemas cardíacos que pueden ser comunes en personas con diabetes."
+      },
+      {
+        "nombre": "Velocidad de sedimentación globular (VSG)",
+        "descripcion": "Puede indicar la presencia de inflamación en el cuerpo."
+      },
+      {
+        "nombre": "Prueba de tiroides",
+        "descripcion": "Las personas con diabetes tienen un riesgo más alto de trastornos de la tiroides."
+      },
+      {
+        "nombre": "Hemograma completo",
+        "descripcion": "Ofrece una imagen detallada del estado general de salud y puede detectar una variedad de problemas, incluyendo infecciones."
+      },
+      {
+        "nombre": "Prueba de vitamina B12",
+        "descripcion": "Los bajos niveles de vitamina B12 pueden ser un efecto secundario de algunos medicamentos para la diabetes."
+      },
+      {
+        "nombre": "Prueba de vitamina D",
+        "descripcion": "Los bajos niveles de vitamina D son comunes en personas con diabetes tipo 2."
+      },
+      {
+        "nombre": "Prueba de función hepática",
+        "descripcion": "Evalúa si los medicamentos para la diabetes están afectando el hígado."
+      }
+    ]
+  }
+  
