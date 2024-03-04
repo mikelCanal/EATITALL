@@ -75,13 +75,27 @@ def encontrar_alimentos(df, vocab_alimentos, umbral_levenshtein=0):
 def nerc_diccionario(df,diccionario,tipo_entidad):
     if tipo_entidad=="alimentos":
         todos_los_elementos = [item for sublist in diccionario.values() for item in sublist]
-    if tipo_entidad=="farmacos" or tipo_entidad=="sintomas" or tipo_entidad=="pruebas clinicas":
+        prefijo='al_'
+    if tipo_entidad=="farmacos":
+        prefijo="far_"
         todos_los_elementos = [elemento['nombre'] for sublist in diccionario.values() for elemento in sublist]
+    if tipo_entidad=="sintomas":
+        prefijo="sin_"
+        todos_los_elementos = [elemento['nombre'] for sublist in diccionario.values() for elemento in sublist]
+    if tipo_entidad=="pruebas clinicas":
+        prefijo="pc_"
+        todos_los_elementos = [elemento['nombre'] for sublist in diccionario.values() for elemento in sublist]
+
+    for elemento in todos_los_elementos:
+        elemento=elemento.lower()
+        elemento=unicodedata.normalize('NFKD', elemento).encode('ASCII', 'ignore').decode('ASCII') #Eliminar acentos
+        nombre_columna_entidad=prefijo+elemento
+        df[nombre_columna_entidad]=0
+
     for k in range(0,len(df)):
-        texto_entrada=df['observaciones'][k]
-        texto = texto_entrada.lower()
+        texto_entrada=df['observaciones'][k].lower()
         texto_entrada=unicodedata.normalize('NFKD', texto_entrada).encode('ASCII', 'ignore').decode('ASCII') #Eliminar acentos
-        palabras = re.split(r'[ ,.;]+', texto)
+        palabras = re.split(r'[ ,.;]+', texto_entrada)
         elementos_encontrados = []
         i = 0
         while i < len(palabras):
@@ -100,7 +114,13 @@ def nerc_diccionario(df,diccionario,tipo_entidad):
                 i += max_longitud  # Ajustar el índice según la longitud del alimento encontrado más largo
             else:
                 i += 1
-        elementos_string = ', '.join(elementos_encontrados)
-        nombre_columna='NERC '+tipo_entidad
-        df.loc[k,nombre_columna]=elementos_string
+        # Generar una columna con las entidades reconocidas separadas por comas
+        # elementos_string = ', '.join(elementos_encontrados)
+        # nombre_columna='NERC '+tipo_entidad
+        # df.loc[k,nombre_columna]=elementos_string
+        for elemento2 in elementos_encontrados:
+            if df[prefijo+elemento2][k]!=0:
+                df[prefijo+elemento2][k]=df[prefijo+elemento2][k]+1
+            if df[prefijo+elemento2][k]==0:        
+                df[prefijo+elemento2][k]=1
     return df
