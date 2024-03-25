@@ -14,9 +14,9 @@ start_time = time.time()  # Captura el tiempo de inicio
 
 # Cargamos los NOMBRES de los paths
 config_path='./definir_reglas/config.json'
-input_path='./archivos/datos_con_10_ejemplos_v3.csv'
+input_path='./archivos/datos_con_10_ejemplos_v5.csv'
 output_con_reglas_path='./archivos/datos_con_10_ejemplos_reglas.csv'
-output_con_reglas_y_extraccion_entidades_path='./archivos/datos_con_10_ejemplos_reglas_y_extraccion_entidades.csv'
+output_con_reglas_y_extraccion_entidades_path='./archivos/datos_con_10_ejemplos_reglas_y_extraccion_entidades_v2.csv'
 vocab_alimentos_path='./archivos/vocab_alimentos.json'
 vocab_farmacos_path='./archivos/vocab_farmacos_y_productos_quimicos.json'
 vocab_sintomas_path='./archivos/vocab_sintomas.json'
@@ -55,10 +55,14 @@ df.to_csv(output_con_reglas_path, index=False, decimal='.')
 #############################
 ### EXTRACCIÓN ENTIDADES ###
 #############################
-df=extraccion_entidades_clasic.nerc_diccionario(df,vocab_alimentos,"alimentos")
-df=extraccion_entidades_clasic.nerc_diccionario(df,vocab_farmacos,"farmacos")
-df=extraccion_entidades_clasic.nerc_diccionario(df,vocab_sintomas,"sintomas")
-df=extraccion_entidades_clasic.nerc_diccionario(df,vocab_pruebas_clinicas,"pruebas clinicas")
+df=extraccion_entidades_clasic.nerc_diccionario(df,"observaciones_v1",vocab_alimentos,"alimentos")
+df=extraccion_entidades_clasic.nerc_diccionario(df,"observaciones_v2",vocab_alimentos,"alimentos")
+df=extraccion_entidades_clasic.nerc_diccionario(df,"observaciones_v1",vocab_farmacos,"farmacos")
+df=extraccion_entidades_clasic.nerc_diccionario(df,"observaciones_v2",vocab_farmacos,"farmacos")
+df=extraccion_entidades_clasic.nerc_diccionario(df,"observaciones_v1",vocab_sintomas,"sintomas")
+df=extraccion_entidades_clasic.nerc_diccionario(df,"observaciones_v2",vocab_sintomas,"sintomas")
+df=extraccion_entidades_clasic.nerc_diccionario(df,"observaciones_v1",vocab_pruebas_clinicas,"pruebas clinicas")
+df=extraccion_entidades_clasic.nerc_diccionario(df,"observaciones_v2",vocab_pruebas_clinicas,"pruebas clinicas")
 # Generamos un csv con los datos generados con las reglas y lo guardamos
 df.to_csv(output_con_reglas_y_extraccion_entidades_path, index=False)
 

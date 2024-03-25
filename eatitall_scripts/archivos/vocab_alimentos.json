@@ -471,6 +471,7 @@
         "Almidón de maíz",
         "Almidón de trigo",
         "Arroz",
+        "Arroces",
         "Arroz hinchado, para el desayuno, enriquecido",
         "Arroz integral, crudo",
         "Arroz integral, hervido",
@@ -562,6 +563,7 @@
         "Pasta alimenticia, integral, hervida",
         "Pasta alimenticia, rellena con carne, hervida",
         "Pastas de te",
+        "Pastas",
         "Pastel con fruta confitada",
         "Pastel de chocolate",
         "Pastel de manzana",
@@ -610,6 +612,7 @@
         "Apio, crudo",
         "Apio, en conserva en salmuera",
         "Bambú, crudo",
+        "Bayas",
         "Berenjena",
         "Berenjena, frita, en aceite de girasol",
         "Berro, crudo",
@@ -708,6 +711,7 @@
         "Dátil",
         "Frambuesa, cruda",
         "Fresa",
+        "Frutas cítricas",
         "Granada",
         "Grosella negra, cruda",
         "Grosella, cruda",
@@ -866,7 +870,9 @@
         "Zumo de tomate, fresco",
         "Zumo de uva",
         "Zumo de uva y melocotón",
-        "Zumo de zanahoria, fresco"
+        "Zumo de zanahoria, fresco",
+        "Zumo de frutas industrial",
+        "Zumos de frutas industriales"
         ],
     "miscelánea":[
         "Ajo, en polvo",
@@ -964,6 +970,8 @@
         "glucidos",
         "carbohidarto",
         "carbohidratos",
+        "hc",
+        "hidratos de carbono",
         "carbohidratos simples",
         "azucares simples", 
         "azucares",
@@ -995,5 +1003,5 @@
         "fruta fresca"
     ],
     "bebidas":["agua","bebidas azucaradas","bebida azucarada","jugo sin azucar añadido"],
-    "otros":["snack","snacks ricos en carbohidratos complejos"]
+    "otros":["snack","snacks ricos en carbohidratos complejos","potasio","antioxidantes"]
 }

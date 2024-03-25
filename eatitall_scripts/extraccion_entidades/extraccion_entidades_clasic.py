@@ -27,52 +27,52 @@ def distancia_levenshtein(s1, s2):
     return matriz_previa[-1]
 
 # Función mejorada para encontrar alimentos considerando la distancia de Levenshtein
-def encontrar_alimentos(df, vocab_alimentos, umbral_levenshtein=0):
-    todos_los_alimentos = [item for sublist in vocab_alimentos.values() for item in sublist]
-    for k in range(len(df)):
-        texto_entrada = df['observaciones'][k].lower()
-        texto_entrada=unicodedata.normalize('NFKD', texto_entrada).encode('ASCII', 'ignore').decode('ASCII') #Eliminar acentos
-        palabras = re.split(r'[ ,.;]+', texto_entrada)
-        alimentos_encontrados = []
-        alimentos_levenshtein=[]
-        palabras_exactas_pre_levenshtein=[]
+# def encontrar_alimentos(df, vocab_alimentos, umbral_levenshtein=0):
+#     todos_los_alimentos = [item for sublist in vocab_alimentos.values() for item in sublist]
+#     for k in range(len(df)):
+#         texto_entrada = df['observaciones'][k].lower()
+#         texto_entrada=unicodedata.normalize('NFKD', texto_entrada).encode('ASCII', 'ignore').decode('ASCII') #Eliminar acentos
+#         palabras = re.split(r'[ ,.;]+', texto_entrada)
+#         alimentos_encontrados = []
+#         alimentos_levenshtein=[]
+#         palabras_exactas_pre_levenshtein=[]
 
-        i = 0
-        while i < len(palabras):
-            max_longitud = 0
-            alimento_a_agregar = ''
-            for alimento in todos_los_alimentos:
-                alimento_partes = re.split(r'[ ,.;]+',alimento.lower())
-                longitud = len(alimento_partes)
-                # Comprobar si la secuencia de palabras coincide con algún alimento
-                if palabras[i:i+longitud] == alimento_partes and longitud > max_longitud:
-                    # Guardar el alimento más largo que coincide
-                    alimento_a_agregar = ' '.join(palabras[i:i+longitud])
-                    max_longitud = longitud
-            if max_longitud > 0:
-                alimentos_encontrados.append(alimento_a_agregar)
-                i += max_longitud
-            else:
-                for alimento in todos_los_alimentos:
-                    alimento_partes = re.split(r'[ ,.;]+', alimento.lower())
-                    longitud = len(alimento_partes)
-                    secuencia_palabras = ' '.join(palabras[i:i+longitud])
-                    distancia=distancia_levenshtein(secuencia_palabras,alimento)
-                    if distancia<=2:
-                        alimentos_levenshtein.append(alimento)
-                        palabras_exactas_pre_levenshtein.append(secuencia_palabras)
-                i += 1
+#         i = 0
+#         while i < len(palabras):
+#             max_longitud = 0
+#             alimento_a_agregar = ''
+#             for alimento in todos_los_alimentos:
+#                 alimento_partes = re.split(r'[ ,.;]+',alimento.lower())
+#                 longitud = len(alimento_partes)
+#                 # Comprobar si la secuencia de palabras coincide con algún alimento
+#                 if palabras[i:i+longitud] == alimento_partes and longitud > max_longitud:
+#                     # Guardar el alimento más largo que coincide
+#                     alimento_a_agregar = ' '.join(palabras[i:i+longitud])
+#                     max_longitud = longitud
+#             if max_longitud > 0:
+#                 alimentos_encontrados.append(alimento_a_agregar)
+#                 i += max_longitud
+#             else:
+#                 for alimento in todos_los_alimentos:
+#                     alimento_partes = re.split(r'[ ,.;]+', alimento.lower())
+#                     longitud = len(alimento_partes)
+#                     secuencia_palabras = ' '.join(palabras[i:i+longitud])
+#                     distancia=distancia_levenshtein(secuencia_palabras,alimento)
+#                     if distancia<=2:
+#                         alimentos_levenshtein.append(alimento)
+#                         palabras_exactas_pre_levenshtein.append(secuencia_palabras)
+#                 i += 1
 
-        alimentos_string = ', '.join(alimentos_encontrados)
-        df.loc[k, 'alimentos_encontrados'] = alimentos_string
-        alimentos_levenshtein_string=', '.join(alimentos_levenshtein)
-        df.loc[k, 'alimentos_encontrados_con_Levenshtein'] = alimentos_levenshtein_string
-        palabras_exactas_pre_levenshtein_string=', '.join(palabras_exactas_pre_levenshtein)
-        df.loc[k, 'palabras_exactas_pre_Levenshtein'] = palabras_exactas_pre_levenshtein_string
-    return df
+#         alimentos_string = ', '.join(alimentos_encontrados)
+#         df.loc[k, 'alimentos_encontrados'] = alimentos_string
+#         alimentos_levenshtein_string=', '.join(alimentos_levenshtein)
+#         df.loc[k, 'alimentos_encontrados_con_Levenshtein'] = alimentos_levenshtein_string
+#         palabras_exactas_pre_levenshtein_string=', '.join(palabras_exactas_pre_levenshtein)
+#         df.loc[k, 'palabras_exactas_pre_Levenshtein'] = palabras_exactas_pre_levenshtein_string
+#     return df
 
 
-def nerc_diccionario(df,diccionario,tipo_entidad):
+def nerc_diccionario(df,columna,diccionario,tipo_entidad):
     if tipo_entidad=="alimentos":
         todos_los_elementos = [item for sublist in diccionario.values() for item in sublist]
         prefijo='al_'
@@ -89,11 +89,11 @@ def nerc_diccionario(df,diccionario,tipo_entidad):
     for elemento in todos_los_elementos:
         elemento=elemento.lower()
         elemento=unicodedata.normalize('NFKD', elemento).encode('ASCII', 'ignore').decode('ASCII') #Eliminar acentos
-        nombre_columna_entidad=prefijo+elemento
+        nombre_columna_entidad=prefijo+columna[-2:]+'_'+elemento
         df[nombre_columna_entidad]=0
 
     for k in range(0,len(df)):
-        texto_entrada=df['observaciones'][k].lower()
+        texto_entrada=df[columna][k].lower()
         texto_entrada=unicodedata.normalize('NFKD', texto_entrada).encode('ASCII', 'ignore').decode('ASCII') #Eliminar acentos
         palabras = re.split(r'[ ,.;]+', texto_entrada)
         elementos_encontrados = []
@@ -119,8 +119,8 @@ def nerc_diccionario(df,diccionario,tipo_entidad):
         # nombre_columna='NERC '+tipo_entidad
         # df.loc[k,nombre_columna]=elementos_string
         for elemento2 in elementos_encontrados:
-            if df[prefijo+elemento2][k]!=0:
-                df[prefijo+elemento2][k]=df[prefijo+elemento2][k]+1
-            if df[prefijo+elemento2][k]==0:        
-                df[prefijo+elemento2][k]=1
+            if df[prefijo+columna[-2:]+'_'+elemento2][k]!=0:
+                df[prefijo+columna[-2:]+'_'+elemento2][k]=df[prefijo+columna[-2:]+'_'+elemento2][k]+1
+            if df[prefijo+columna[-2:]+'_'+elemento2][k]==0:        
+                df[prefijo+columna[-2:]+'_'+elemento2][k]=1
     return df
