@@ -1,4 +1,6 @@
 import sys
+
+from extraccion_entidades.contraindicaciones import clasificar_elementos
 sys.path.insert(1, '/home/eatitall_scripts')
 sys.path.insert(1, '/home/root/pctobs/lib/python3.8/site-packages')
 import pandas as pd
@@ -72,7 +74,29 @@ import unicodedata
 #     return df
 
 
-def nerc_diccionario(df,columna,diccionario,tipo_entidad,contraindiaciones=True):
+def identificar_elementos(texto,todos_los_elementos,elementos_encontrados):
+    palabras = re.split(r'[ ,.;]+', texto)
+    i = 0
+    while i < len(palabras):
+        max_longitud = 0
+        elemento_a_agregar = ''
+        for elemento in todos_los_elementos:
+            elemento_partes = re.split(r'[ ,.;]+',elemento.lower())
+            longitud = len(elemento_partes)
+            # Comprobar si la secuencia de palabras coincide con algún alimento
+            if palabras[i:i+longitud] == elemento_partes and longitud > max_longitud:
+                # Guardar el alimento más largo que coincide
+                elemento_a_agregar = ' '.join(palabras[i:i+longitud])
+                max_longitud = longitud
+        if max_longitud > 0:
+            elementos_encontrados.append(elemento_a_agregar)
+            i += max_longitud  # Ajustar el índice según la longitud del alimento encontrado más largo
+        else:
+            i += 1
+    return elementos_encontrados
+
+
+def nerc_diccionario(df,columna,diccionario,tipo_entidad):
     if tipo_entidad=="alimentos":
         todos_los_elementos = [item for sublist in diccionario.values() for item in sublist]
         prefijo='al_'
@@ -90,37 +114,35 @@ def nerc_diccionario(df,columna,diccionario,tipo_entidad,contraindiaciones=True)
         elemento=elemento.lower()
         elemento=unicodedata.normalize('NFKD', elemento).encode('ASCII', 'ignore').decode('ASCII') #Eliminar acentos
         nombre_columna_entidad=prefijo+columna[-2:]+'_'+elemento
-        df[nombre_columna_entidad]=0
+        nombre_columna_entidad_indicacion=nombre_columna_entidad+'_ind'
+        nombre_columna_entidad_contraindicacion=nombre_columna_entidad+'_contra'
+        df[nombre_columna_entidad_indicacion]=0
+        df[nombre_columna_entidad_contraindicacion]=0
 
     for k in range(0,len(df)):
         texto_entrada=df[columna][k].lower()
         texto_entrada=unicodedata.normalize('NFKD', texto_entrada).encode('ASCII', 'ignore').decode('ASCII') #Eliminar acentos
-        palabras = re.split(r'[ ,.;]+', texto_entrada)
-        elementos_encontrados = []
-        i = 0
-        while i < len(palabras):
-            max_longitud = 0
-            elemento_a_agregar = ''
-            for elemento in todos_los_elementos:
-                elemento_partes = re.split(r'[ ,.;]+',elemento.lower())
-                longitud = len(elemento_partes)
-                # Comprobar si la secuencia de palabras coincide con algún alimento
-                if palabras[i:i+longitud] == elemento_partes and longitud > max_longitud:
-                    # Guardar el alimento más largo que coincide
-                    elemento_a_agregar = ' '.join(palabras[i:i+longitud])
-                    max_longitud = longitud
-            if max_longitud > 0:
-                elementos_encontrados.append(elemento_a_agregar)
-                i += max_longitud  # Ajustar el índice según la longitud del alimento encontrado más largo
-            else:
-                i += 1
+        oraciones_indicaciones, oraciones_contraindicaciones=clasificar_elementos(texto_entrada)
+        elementos_encontrados_indicaciones=[]
+        elementos_encontrados_contraindicaciones=[]
+        for oracion in oraciones_indicaciones:
+            elementos_encontrados_indicaciones=identificar_elementos(oracion,todos_los_elementos,elementos_encontrados_indicaciones)
+        for oracion in oraciones_contraindicaciones:
+            elementos_encontrados_contraindicaciones=identificar_elementos(oracion,todos_los_elementos,elementos_encontrados_contraindicaciones)
+        
         # Generar una columna con las entidades reconocidas separadas por comas
         # elementos_string = ', '.join(elementos_encontrados)
         # nombre_columna='NERC '+tipo_entidad
         # df.loc[k,nombre_columna]=elementos_string
-        for elemento2 in elementos_encontrados:
-            if df[prefijo+columna[-2:]+'_'+elemento2][k]!=0:
-                df[prefijo+columna[-2:]+'_'+elemento2][k]=df[prefijo+columna[-2:]+'_'+elemento2][k]+1
-            if df[prefijo+columna[-2:]+'_'+elemento2][k]==0:        
-                df[prefijo+columna[-2:]+'_'+elemento2][k]=1
+        for elemento2 in elementos_encontrados_indicaciones:
+            if df[prefijo+columna[-2:]+'_'+elemento2+'_ind'][k]!=0:
+                df[prefijo+columna[-2:]+'_'+elemento2+'_ind'][k]=df[prefijo+columna[-2:]+'_'+elemento2+'_ind'][k]+1
+            if df[prefijo+columna[-2:]+'_'+elemento2+'_ind'][k]==0:        
+                df[prefijo+columna[-2:]+'_'+elemento2+'_ind'][k]=1
+
+        for elemento2 in elementos_encontrados_contraindicaciones:
+            if df[prefijo+columna[-2:]+'_'+elemento2+'_contra'][k]!=0:
+                df[prefijo+columna[-2:]+'_'+elemento2+'_contra'][k]=df[prefijo+columna[-2:]+'_'+elemento2+'_contra'][k]+1
+            if df[prefijo+columna[-2:]+'_'+elemento2+'_contra'][k]==0:        
+                df[prefijo+columna[-2:]+'_'+elemento2+'_contra'][k]=1
     return df
