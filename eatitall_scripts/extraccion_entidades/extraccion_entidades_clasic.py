@@ -6,25 +6,25 @@ import json
 import re
 import unicodedata
 
-# Función para calcular la distancia de Levenshtein
-def distancia_levenshtein(s1, s2):
-    if len(s1) < len(s2):
-        return distancia_levenshtein(s2, s1)
+# # Función para calcular la distancia de Levenshtein
+# def distancia_levenshtein(s1, s2):
+#     if len(s1) < len(s2):
+#         return distancia_levenshtein(s2, s1)
 
-    if len(s2) == 0:
-        return len(s1)
+#     if len(s2) == 0:
+#         return len(s1)
 
-    matriz_previa = range(len(s2) + 1)
-    for i, c1 in enumerate(s1):
-        matriz_actual = [i + 1]
-        for j, c2 in enumerate(s2):
-            inserciones = matriz_previa[j + 1] + 1
-            eliminaciones = matriz_actual[j] + 1
-            sustituciones = matriz_previa[j] + (c1 != c2)
-            matriz_actual.append(min(inserciones, eliminaciones, sustituciones))
-        matriz_previa = matriz_actual
+#     matriz_previa = range(len(s2) + 1)
+#     for i, c1 in enumerate(s1):
+#         matriz_actual = [i + 1]
+#         for j, c2 in enumerate(s2):
+#             inserciones = matriz_previa[j + 1] + 1
+#             eliminaciones = matriz_actual[j] + 1
+#             sustituciones = matriz_previa[j] + (c1 != c2)
+#             matriz_actual.append(min(inserciones, eliminaciones, sustituciones))
+#         matriz_previa = matriz_actual
     
-    return matriz_previa[-1]
+#     return matriz_previa[-1]
 
 # Función mejorada para encontrar alimentos considerando la distancia de Levenshtein
 # def encontrar_alimentos(df, vocab_alimentos, umbral_levenshtein=0):
@@ -72,7 +72,7 @@ def distancia_levenshtein(s1, s2):
 #     return df
 
 
-def nerc_diccionario(df,columna,diccionario,tipo_entidad):
+def nerc_diccionario(df,columna,diccionario,tipo_entidad,contraindiaciones=True):
     if tipo_entidad=="alimentos":
         todos_los_elementos = [item for sublist in diccionario.values() for item in sublist]
         prefijo='al_'
