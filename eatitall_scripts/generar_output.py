@@ -16,7 +16,7 @@ start_time = time.time()  # Captura el tiempo de inicio
 config_path='./definir_reglas/config.json'
 input_path='./archivos/datos_con_10_ejemplos_v5.csv'
 output_con_reglas_path='./archivos/datos_con_10_ejemplos_reglas.csv'
-output_con_reglas_y_extraccion_entidades_path='./archivos/datos_con_10_ejemplos_reglas_y_extraccion_entidades_v3.csv'
+output_con_reglas_y_extraccion_entidades_path='./archivos/datos_con_10_ejemplos_reglas_y_extraccion_entidades_v4.csv'
 vocab_alimentos_path='./archivos/vocab_alimentos.json'
 vocab_farmacos_path='./archivos/vocab_farmacos_y_productos_quimicos.json'
 vocab_sintomas_path='./archivos/vocab_sintomas.json'
@@ -68,3 +68,4 @@ df.to_csv(output_con_reglas_y_extraccion_entidades_path, index=False)
 
 end_time = time.time()  # Captura el tiempo al finalizar la ejecución
 print(f"Tiempo de ejecución: {end_time - start_time} segundos")  # Imprime la duración de la ejecución
+print("Tamaño (columnas): ",len(df.iloc[0]))

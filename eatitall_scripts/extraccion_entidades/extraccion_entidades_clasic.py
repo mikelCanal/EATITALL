@@ -114,35 +114,52 @@ def nerc_diccionario(df,columna,diccionario,tipo_entidad):
         elemento=elemento.lower()
         elemento=unicodedata.normalize('NFKD', elemento).encode('ASCII', 'ignore').decode('ASCII') #Eliminar acentos
         nombre_columna_entidad=prefijo+columna[-2:]+'_'+elemento
-        nombre_columna_entidad_indicacion=nombre_columna_entidad+'_ind'
-        nombre_columna_entidad_contraindicacion=nombre_columna_entidad+'_contra'
-        df[nombre_columna_entidad_indicacion]=0
-        df[nombre_columna_entidad_contraindicacion]=0
+        if tipo_entidad=="alimentos":
+            nombre_columna_entidad_indicacion=nombre_columna_entidad+'_ind'
+            nombre_columna_entidad_contraindicacion=nombre_columna_entidad+'_contra'
+            df[nombre_columna_entidad_indicacion]=0
+            df[nombre_columna_entidad_contraindicacion]=0
+        else:
+            df[nombre_columna_entidad]=0
 
     for k in range(0,len(df)):
         texto_entrada=df[columna][k].lower()
         texto_entrada=unicodedata.normalize('NFKD', texto_entrada).encode('ASCII', 'ignore').decode('ASCII') #Eliminar acentos
-        oraciones_indicaciones, oraciones_contraindicaciones=clasificar_elementos(texto_entrada)
         elementos_encontrados_indicaciones=[]
         elementos_encontrados_contraindicaciones=[]
-        for oracion in oraciones_indicaciones:
-            elementos_encontrados_indicaciones=identificar_elementos(oracion,todos_los_elementos,elementos_encontrados_indicaciones)
-        for oracion in oraciones_contraindicaciones:
-            elementos_encontrados_contraindicaciones=identificar_elementos(oracion,todos_los_elementos,elementos_encontrados_contraindicaciones)
+        if tipo_entidad=="alimentos":
+            oraciones_indicaciones, oraciones_contraindicaciones=clasificar_elementos(texto_entrada)
+            for oracion in oraciones_indicaciones:
+                elementos_encontrados_indicaciones=identificar_elementos(oracion,todos_los_elementos,elementos_encontrados_indicaciones)
+            for oracion in oraciones_contraindicaciones:
+                elementos_encontrados_contraindicaciones=identificar_elementos(oracion,todos_los_elementos,elementos_encontrados_contraindicaciones)
+        else:
+            elementos_encontrados=[]
+            elementos_encontrados_indicaciones=identificar_elementos(texto_entrada,todos_los_elementos,elementos_encontrados_indicaciones)
+
         
         # Generar una columna con las entidades reconocidas separadas por comas
         # elementos_string = ', '.join(elementos_encontrados)
         # nombre_columna='NERC '+tipo_entidad
         # df.loc[k,nombre_columna]=elementos_string
-        for elemento2 in elementos_encontrados_indicaciones:
-            if df[prefijo+columna[-2:]+'_'+elemento2+'_ind'][k]!=0:
-                df[prefijo+columna[-2:]+'_'+elemento2+'_ind'][k]=df[prefijo+columna[-2:]+'_'+elemento2+'_ind'][k]+1
-            if df[prefijo+columna[-2:]+'_'+elemento2+'_ind'][k]==0:        
-                df[prefijo+columna[-2:]+'_'+elemento2+'_ind'][k]=1
+        if tipo_entidad=="alimentos":
+            for elemento2 in elementos_encontrados_indicaciones:
+                if df[prefijo+columna[-2:]+'_'+elemento2+'_ind'][k]!=0:
+                    df[prefijo+columna[-2:]+'_'+elemento2+'_ind'][k]=df[prefijo+columna[-2:]+'_'+elemento2+'_ind'][k]+1
+                if df[prefijo+columna[-2:]+'_'+elemento2+'_ind'][k]==0:        
+                    df[prefijo+columna[-2:]+'_'+elemento2+'_ind'][k]=1
 
-        for elemento2 in elementos_encontrados_contraindicaciones:
-            if df[prefijo+columna[-2:]+'_'+elemento2+'_contra'][k]!=0:
-                df[prefijo+columna[-2:]+'_'+elemento2+'_contra'][k]=df[prefijo+columna[-2:]+'_'+elemento2+'_contra'][k]+1
-            if df[prefijo+columna[-2:]+'_'+elemento2+'_contra'][k]==0:        
-                df[prefijo+columna[-2:]+'_'+elemento2+'_contra'][k]=1
+            for elemento2 in elementos_encontrados_contraindicaciones:
+                if df[prefijo+columna[-2:]+'_'+elemento2+'_contra'][k]!=0:
+                    df[prefijo+columna[-2:]+'_'+elemento2+'_contra'][k]=df[prefijo+columna[-2:]+'_'+elemento2+'_contra'][k]+1
+                if df[prefijo+columna[-2:]+'_'+elemento2+'_contra'][k]==0:        
+                    df[prefijo+columna[-2:]+'_'+elemento2+'_contra'][k]=1
+        else:
+            for elemento in elementos_encontrados:
+                if df[prefijo+columna[-2:]+'_'+elemento2][k]!=0:
+                    df[prefijo+columna[-2:]+'_'+elemento2][k]=df[prefijo+columna[-2:]+'_'+elemento2][k]+1
+                if df[prefijo+columna[-2:]+'_'+elemento2][k]==0:        
+                    df[prefijo+columna[-2:]+'_'+elemento2][k]=1
+
+
     return df
