@@ -92,7 +92,7 @@ def diabetes(df:pd.DataFrame,config):
     pg2h_75g_ogtt=config['variables']['pg2h_75g_ogtt']['siglas dataset']
     ga=config['variables']['ga']['siglas dataset']
     hba1c_umbral_inferior_diabetes=config['parametros']['diabetes']['hba1c_umbral_inferior']
-    fg_umbral_inferior_diabetes=config['parametros']['diabetes']['fg_umbral_inferior']
+    fg_umbral_inferior_diabetes=config['parametros']['diabetes']['fg_umbral_inferior'] #A fecha de 25/04/2024 fg_umbral=110 porque lo dice Kamila
     pg2h_75g_ogtt_umbral_inferior_diabetes=config['parametros']['diabetes']['pg2h_75g_ogtt_umbral_inferior']
     ga_umbral_inferior_diabetes=config['parametros']['diabetes']['ga_umbral_inferior']
     # df['diabetes']=0 #Definimos una columna y la inicializamos con 0s. Los que la tengan serán un 1.

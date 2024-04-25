@@ -52,7 +52,7 @@
     "parametros": {
         "diabetes":{
             "hba1c_umbral_inferior":6.5,
-            "fg_umbral_inferior":126,
+            "fg_umbral_inferior":110,
             "pg2h_75g_ogtt_umbral_inferior":200,
             "ga_umbral_inferior":200
         },
