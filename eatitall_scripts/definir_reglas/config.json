@@ -46,7 +46,8 @@
         "hdl_colesterol":{"siglas dataset":""},
         "gdm":{"siglas dataset":""},
         "vih":{"siglas dataset":""},
-        "pancreatitis":{"siglas dataset":""}
+        "pancreatitis":{"siglas dataset":""},
+        "insulina":{"insulina":""}
     },
     "parametros": {
         "diabetes":{
@@ -132,6 +133,9 @@
             "nivel1_hba1c_umbral_inferior":54,
             "nivel1_hba1c_umbral_superior":70,
             "nivel2_hba1c_umbral_inferior":54
+        },
+        "bajo_nivel_insulina":{
+            "insulina_umbral_inferior":5
         }
     }
 }

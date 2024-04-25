@@ -177,7 +177,16 @@ def hipoglucemia(df:pd.DataFrame,config) -> pd.DataFrame:
     df['hipoglucemia']=0
     for k in range(0,len(df)):
         if df[hba1c][k]>=hba1c_nivel1_umbral_inferior and df[hba1c][k]<hba1c_nivel1_umbral_superior:
-            df['hipoglucemia']=1
+            df['hipoglucemia'][k]=1
         if df[hba1c][k]<hba1c_nivel2_umbral_inferior:
-            df['hipoglucemia']=2
+            df['hipoglucemia'][k]=2
+    return df
+
+def bajo_nivel_insulina(df:pd.DataFrame,config) -> pd.DataFrame:
+    insulina=config['variables']['insulina']['siglas dataset']
+    insulina_umbral_inferior=config['parametros']['bajo_nivel_insulina']['insulina_umbral_inferior']
+    df['bajo_nivel_insulina']=0
+    for k in range(0,len(df)):
+        if df[insulina][k]<insulina_umbral_inferior:
+            df['bajo_nivel_insulina'][k]=1
     return df
