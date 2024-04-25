@@ -38,6 +38,8 @@ with open(vocab_pruebas_clinicas_path, 'r') as archivo:
 #############################
 ### NORMALIZACIÓN DE DATOS ###
 #############################
+# Sacamos un pequeño log con la cantidad de columnas añadidas + lista
+# Listado con la nueva nomenclatura si la hay
 # Cargamos el archivo CSV
 df = pd.read_csv(input_path)
 #Añadimos nuevas variables

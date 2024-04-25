@@ -37,3 +37,6 @@ USER $USERNAME
 # RUN pip --disable-pip-version-check --no-cache-dir install token==1.8.6
 # RUN pip uninstall numpy -y
 # RUN pip install numpy==1.18.5
+
+# Exponer el puerto en el que corre Streamlit
+EXPOSE 8501

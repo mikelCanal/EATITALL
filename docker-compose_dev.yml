@@ -13,6 +13,7 @@ services:
             - "4000:4000"
             - "8081:8081"
             - "8888:8888"
+            - "8501:8501"
         command: jupyter notebook --notebook-dir=/home/eatitall_scripts --ip 0.0.0.0 --no-browser --allow-root --NotebookApp.token="eatitall" --NotebookApp.allow_origin="\*"            
         networks:
           - elastic

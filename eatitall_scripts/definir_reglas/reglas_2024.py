@@ -101,6 +101,7 @@ def diabetes(df:pd.DataFrame,config):
     #         df['diabetes'][k]=1
     #     if df[fg][k]>=fg_umbral_inferior_diabetes:
     #         df['diabetes'][k]=1
+    #           if df[fg][k]>=100 and df[fg][k]<=100
     #     if df[pg2h_75g_ogtt][k]>=pg2h_75g_ogtt_umbral_inferior_diabetes:
     #         df['diabetes'][k]=1
     #     if df[ga][k]>=ga_umbral_inferior_diabetes:
@@ -121,3 +122,62 @@ def diabetes_con_vih(df:pd.DataFrame,config) -> pd.DataFrame:
                 df['diabetes_con_vih'][k]=1
     return df
 
+def corr_hba1c_fg(df:pd.DataFrame,config) -> pd.DataFrame:
+    hba1c=config['variables']['hba1c']['siglas dataset']
+    fg=config['variables']['fg']['siglas dataset']
+    porcentaje_hba1c_5=config['parametros']['corr_hba1c_fg']['porcentaje_hba1c_5']
+    hba1c_5_umbral_inferior=config['parametros']['corr_hba1c_fg']['hba1c_5_umbral_inferior']
+    hba1c_5_umbral_superior=config['parametros']['corr_hba1c_fg']['hba1c_5_umbral_superior']
+    porcentaje_hba1c_6=config['parametros']['corr_hba1c_fg']['porcentaje_hba1c_6']
+    hba1c_6_umbral_inferior=config['parametros']['corr_hba1c_fg']['hba1c_6_umbral_inferior']
+    hba1c_6_umbral_superior=config['parametros']['corr_hba1c_fg']['hba1c_6_umbral_superior']
+    porcentaje_hba1c_7=config['parametros']['corr_hba1c_fg']['porcentaje_hba1c_7']
+    hba1c_7_umbral_inferior=config['parametros']['corr_hba1c_fg']['hba1c_7_umbral_inferior']
+    hba1c_7_umbral_superior=config['parametros']['corr_hba1c_fg']['hba1c_7_umbral_superior']
+    porcentaje_hba1c_8=config['parametros']['corr_hba1c_fg']['porcentaje_hba1c_8']
+    hba1c_8_umbral_inferior=config['parametros']['corr_hba1c_fg']['hba1c_8_umbral_inferior']
+    hba1c_8_umbral_superior=config['parametros']['corr_hba1c_fg']['hba1c_8_umbral_superior']
+    porcentaje_hba1c_9=config['parametros']['corr_hba1c_fg']['porcentaje_hba1c_9']
+    hba1c_9_umbral_inferior=config['parametros']['corr_hba1c_fg']['hba1c_9_umbral_inferior']
+    hba1c_9_umbral_superior=config['parametros']['corr_hba1c_fg']['hba1c_9_umbral_superior']
+    porcentaje_hba1c_10=config['parametros']['corr_hba1c_fg']['porcentaje_hba1c_10']
+    hba1c_10_umbral_inferior=config['parametros']['corr_hba1c_fg']['hba1c_10_umbral_inferior']
+    hba1c_10_umbral_superior=config['parametros']['corr_hba1c_fg']['hba1c_10_umbral_superior']
+    porcentaje_hba1c_11=config['parametros']['corr_hba1c_fg']['porcentaje_hba1c_11']
+    hba1c_11_umbral_inferior=config['parametros']['corr_hba1c_fg']['hba1c_11_umbral_inferior']
+    hba1c_11_umbral_superior=config['parametros']['corr_hba1c_fg']['hba1c_11_umbral_superior']
+    porcentaje_hba1c_12=config['parametros']['corr_hba1c_fg']['porcentaje_hba1c_12']
+    hba1c_12_umbral_inferior=config['parametros']['corr_hba1c_fg']['hba1c_12_umbral_inferior']
+    hba1c_12_umbral_superior=config['parametros']['corr_hba1c_fg']['hba1c_12_umbral_superior']
+    df['corr_hba1c_fg']=0 #Definimos una columna y la inicializamos con 0s. Si hay correlación ponemos un 1.
+    for k in range(0,len(df)):
+        if df[hba1c][k]>=porcentaje_hba1c_5+0.5 and df[hba1c][k]<porcentaje_hba1c_5+0.5 and df[fg][k]>=hba1c_5_umbral_inferior and df[fg][k]<=hba1c_5_umbral_superior:
+            df['corr_hba1c_fg'][k]=1
+        if df[hba1c][k]>=porcentaje_hba1c_6+0.5 and df[hba1c][k]<porcentaje_hba1c_6+0.5 and df[fg][k]>=hba1c_6_umbral_inferior and df[fg][k]<=hba1c_6_umbral_superior:
+            df['corr_hba1c_fg'][k]=1
+        if df[hba1c][k]>=porcentaje_hba1c_7+0.5 and df[hba1c][k]<porcentaje_hba1c_7+0.5 and df[fg][k]>=hba1c_7_umbral_inferior and df[fg][k]<=hba1c_7_umbral_superior:
+            df['corr_hba1c_fg'][k]=1
+        if df[hba1c][k]>=porcentaje_hba1c_8+0.5 and df[hba1c][k]<porcentaje_hba1c_8+0.5 and df[fg][k]>=hba1c_8_umbral_inferior and df[fg][k]<=hba1c_8_umbral_superior:
+            df['corr_hba1c_fg'][k]=1
+        if df[hba1c][k]>=porcentaje_hba1c_9+0.5 and df[hba1c][k]<porcentaje_hba1c_9+0.5 and df[fg][k]>=hba1c_9_umbral_inferior and df[fg][k]<=hba1c_9_umbral_superior:
+            df['corr_hba1c_fg'][k]=1
+        if df[hba1c][k]>=porcentaje_hba1c_10+0.5 and df[hba1c][k]<porcentaje_hba1c_10+0.5 and df[fg][k]>=hba1c_10_umbral_inferior and df[fg][k]<=hba1c_10_umbral_superior:
+            df['corr_hba1c_fg'][k]=1
+        if df[hba1c][k]>=porcentaje_hba1c_11+0.5 and df[hba1c][k]<porcentaje_hba1c_11+0.5 and df[fg][k]>=hba1c_11_umbral_inferior and df[fg][k]<=hba1c_11_umbral_superior:
+            df['corr_hba1c_fg'][k]=1
+        if df[hba1c][k]>=porcentaje_hba1c_12+0.5 and df[hba1c][k]<porcentaje_hba1c_12+0.5 and df[fg][k]>=hba1c_12_umbral_inferior and df[fg][k]<=hba1c_12_umbral_superior:
+            df['corr_hba1c_fg'][k]=1
+    return df
+
+def hipoglucemia(df:pd.DataFrame,config) -> pd.DataFrame:
+    hba1c=config['variables']['hba1c']['siglas dataset']
+    hba1c_nivel1_umbral_inferior=config['parametros']['hipoglucemia']['nivel1_hba1c_umbral_inferior']
+    hba1c_nivel1_umbral_superior=config['parametros']['hipoglucemia']['nivel1_hba1c_umbral_superior']
+    hba1c_nivel2_umbral_inferior=config['parametros']['hipoglucemia']['nivel2_hba1c_umbral_inferior']
+    df['hipoglucemia']=0
+    for k in range(0,len(df)):
+        if df[hba1c][k]>=hba1c_nivel1_umbral_inferior and df[hba1c][k]<hba1c_nivel1_umbral_superior:
+            df['hipoglucemia']=1
+        if df[hba1c][k]<hba1c_nivel2_umbral_inferior:
+            df['hipoglucemia']=2
+    return df

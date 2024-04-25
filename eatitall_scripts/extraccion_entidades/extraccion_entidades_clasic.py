@@ -136,8 +136,7 @@ def nerc_diccionario(df,columna,diccionario,tipo_entidad):
         else:
             elementos_encontrados=[]
             elementos_encontrados_indicaciones=identificar_elementos(texto_entrada,todos_los_elementos,elementos_encontrados_indicaciones)
-
-        
+       
         # Generar una columna con las entidades reconocidas separadas por comas
         # elementos_string = ', '.join(elementos_encontrados)
         # nombre_columna='NERC '+tipo_entidad
