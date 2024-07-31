@@ -356,9 +356,14 @@ binary_columns_full_df.append('sexo') #Es binaria pero no de 0,1 sino 1,2
 # print(f"Las columnas binarias son: {binary_columns_full_df}")
 
 # Cargamos el archivo de configuración
-config_path='./archivos/config_perfiles_clinicos.json'
-with open(config_path, 'r') as archivo:
-    config_perfiles_clinicos = json.load(archivo)
+# config_path='./archivos/config_perfiles_clinicos.json'
+# with open(config_path, 'r') as archivo:
+    # config_perfiles_clinicos = json.load(archivo)
+# Cargar el archivo de configuración
+uploaded_file = st.file_uploader("Sube el archivo de configuración JSON", type="json")
+if uploaded_file is not None:
+    config_perfiles_clinicos = json.load(uploaded_file)
+    st.write("Archivo de configuración cargado exitosamente.")
 
 # Aplicamos los valores definidos en el archivo de configuración para cada variable binaria 
 
