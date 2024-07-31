@@ -16,7 +16,8 @@ from io import BytesIO
 st.title("Análisis de Clustering con K-means")
 
 # Cargar datos
-df = pd.read_csv('/archivos/datos_gpt_con_40_ejemplos_reglas_v11.csv')
+# df = pd.read_csv('/archivos/datos_gpt_con_40_ejemplos_reglas_v11.csv')
+t.file_uploader("Sube el archivo CSV con los datos", type="csv")
 # st.write("Datos cargados", df.head())
 
 ### Limpiamos los datos para poder aplicar algoritmos de clustering
