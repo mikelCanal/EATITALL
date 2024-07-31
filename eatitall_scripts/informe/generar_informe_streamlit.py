@@ -297,7 +297,7 @@ def crear_dataframe_centroides_desviacion(centroids, desviaciones_estandar):
             cluster_dataframes[cluster_id] = df_cluster
             df_cluster.to_excel(writer, sheet_name=f'Cluster_{cluster_id}', index=False)
         
-        writer.save()
+        # writer.save()
         processed_data = output.getvalue()
     
     return cluster_dataframes, processed_data
