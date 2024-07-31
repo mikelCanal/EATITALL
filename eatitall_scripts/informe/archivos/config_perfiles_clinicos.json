@@ -1,0 +1,399 @@
+{
+    "sexo":{
+        "siglas dataset":"sexo",
+        "umbral_sexo":1.5
+    },
+    "cisgenero": {
+      "siglas dataset": "cisgenero",
+      "umbral_cisgenero": 0.5
+    },
+    "lugar_nac": {
+      "siglas dataset": "lugar_nac",
+      "umbral_lugar_nac": 0.5
+    },
+    "ecr_kdigo": {
+      "siglas dataset": "ecr_kdigo",
+      "umbral_ecr_kdigo": 0.5
+    },
+    "comp_oftalmicas": {
+      "siglas dataset": "comp_oftalmicas",
+      "umbral_comp_oftalmicas": 0.5
+    },
+    "neuropatia": {
+      "siglas dataset": "neuropatia",
+      "umbral_neuropatia": 0.5
+    },
+    "arterio_per": {
+      "siglas dataset": "arterio_per",
+      "umbral_arterio_per": 0.5
+    },
+    "cardio_isq": {
+      "siglas dataset": "cardio_isq",
+      "umbral_cardio_isq": 0.5
+    },
+    "ins_card": {
+      "siglas dataset": "ins_card",
+      "umbral_ins_card": 0.5
+    },
+    "insulina_dep": {
+      "siglas dataset": "insulina_dep",
+      "umbral_insulina_dep": 0.5
+    },
+    "tras_pancreaticos": {
+      "siglas dataset": "tras_pancreaticos",
+      "umbral_tras_pancreaticos": 0.5
+    },
+    "ic_tipo": {
+      "siglas dataset": "ic_tipo",
+      "umbral_ic_tipo": 0.5
+    },
+    "tabaquismo": {
+      "siglas dataset": "tabaquismo",
+      "umbral_tabaquismo": 0.5
+    },
+    "alcoholismo": {
+      "siglas dataset": "alcoholismo",
+      "umbral_alcoholismo": 0.5
+    },
+    "int_alimentaria": {
+      "siglas dataset": "int_alimentaria",
+      "umbral_int_alimentaria": 0.5
+    },
+    "situacin_clnica_complete": {
+      "siglas dataset": "situacin_clnica_complete",
+      "umbral_situacin_clnica_complete": 0.5
+    },
+    "valoracin_del_estado_nutricional_complete": {
+      "siglas dataset": "valoracin_del_estado_nutricional_complete",
+      "umbral_valoracin_del_estado_nutricional_complete": 0.5
+    },
+    "recomendaciones_nutricionales_complete": {
+      "siglas dataset": "recomendaciones_nutricionales_complete",
+      "umbral_recomendaciones_nutricionales_complete": 0.5
+    },
+    "dx_principal_E11": {
+      "siglas dataset": "dx_principal_E11",
+      "umbral_dx_principal_E11": 0.5
+    },
+    "dx_principal_E12": {
+      "siglas dataset": "dx_principal_E12",
+      "umbral_dx_principal_E12": 0.5
+    },
+    "dx_principal_E13": {
+      "siglas dataset": "dx_principal_E13",
+      "umbral_dx_principal_E13": 0.5
+    },
+    "dx_asociados_I11": {
+      "siglas dataset": "dx_asociados_I11",
+      "umbral_dx_asociados_I11": 0.5
+    },
+    "dx_asociados_I25": {
+      "siglas dataset": "dx_asociados_I25",
+      "umbral_dx_asociados_I25": 0.5
+    },
+    "dx_asociados_I63": {
+      "siglas dataset": "dx_asociados_I63",
+      "umbral_dx_asociados_I63": 0.5
+    },
+    "dx_asociados_K29": {
+      "siglas dataset": "dx_asociados_K29",
+      "umbral_dx_asociados_K29": 0.5
+    },
+    "dx_asociados_K35": {
+      "siglas dataset": "dx_asociados_K35",
+      "umbral_dx_asociados_K35": 0.5
+    },
+    "dx_asociados_N18": {
+      "siglas dataset": "dx_asociados_N18",
+      "umbral_dx_asociados_N18": 0.5
+    },
+    "dx_asociados_N19": {
+      "siglas dataset": "dx_asociados_N19",
+      "umbral_dx_asociados_N19": 0.5
+    },
+    "dx_asociados_2_E78": {
+      "siglas dataset": "dx_asociados_2_E78",
+      "umbral_dx_asociados_2_E78": 0.5
+    },
+    "dx_asociados_2_E78.1": {
+      "siglas dataset": "dx_asociados_2_E78.1",
+      "umbral_dx_asociados_2_E78.1": 0.5
+    },
+    "dx_asociados_2_E78.2": {
+      "siglas dataset": "dx_asociados_2_E78.2",
+      "umbral_dx_asociados_2_E78.2": 0.5
+    },
+    "dx_asociados_2_F32.9": {
+      "siglas dataset": "dx_asociados_2_F32.9",
+      "umbral_dx_asociados_2_F32.9": 0.5
+    },
+    "dx_asociados_2_G56": {
+      "siglas dataset": "dx_asociados_2_G56",
+      "umbral_dx_asociados_2_G56": 0.5
+    },
+    "dx_asociados_2_G62.9": {
+      "siglas dataset": "dx_asociados_2_G62.9",
+      "umbral_dx_asociados_2_G62.9": 0.5
+    },
+    "dx_asociados_2_H36": {
+      "siglas dataset": "dx_asociados_2_H36",
+      "umbral_dx_asociados_2_H36": 0.5
+    },
+    "dx_asociados_2_I70": {
+      "siglas dataset": "dx_asociados_2_I70",
+      "umbral_dx_asociados_2_I70": 0.5
+    },
+    "dx_asociados_2_L97": {
+      "siglas dataset": "dx_asociados_2_L97",
+      "umbral_dx_asociados_2_L97": 0.5
+    },
+    "dx_asociados_3_E78.1": {
+      "siglas dataset": "dx_asociados_3_E78.1",
+      "umbral_dx_asociados_3_E78.1": 0.5
+    },
+    "dx_asociados_3_E78.2": {
+      "siglas dataset": "dx_asociados_3_E78.2",
+      "umbral_dx_asociados_3_E78.2": 0.5
+    },
+    "dx_asociados_3_G99.0": {
+      "siglas dataset": "dx_asociados_3_G99.0",
+      "umbral_dx_asociados_3_G99.0": 0.5
+    },
+    "dx_asociados_3_H36": {
+      "siglas dataset": "dx_asociados_3_H36",
+      "umbral_dx_asociados_3_H36": 0.5
+    },
+    "dx_asociados_4_I25": {
+      "siglas dataset": "dx_asociados_4_I25",
+      "umbral_dx_asociados_4_I25": 0.5
+    },
+    "dx_asociados_4_N17-N19.9": {
+      "siglas dataset": "dx_asociados_4_N17-N19.9",
+      "umbral_dx_asociados_4_N17-N19.9": 0.5
+    },
+    "medicamento_ej_med_E10-E14.9_2": {
+      "siglas dataset": "medicamento_ej_med_E10-E14.9_2",
+      "umbral_medicamento_ej_med_E10-E14.9_2": 0.5
+    },
+    "medicamento_ej_med_E11_1": {
+      "siglas dataset": "medicamento_ej_med_E11_1",
+      "umbral_medicamento_ej_med_E11_1": 0.5
+    },
+    "medicamento_ej_med_E11_2": {
+      "siglas dataset": "medicamento_ej_med_E11_2",
+      "umbral_medicamento_ej_med_E11_2": 0.5
+    },
+    "medicamento_ej_med_E12_1": {
+      "siglas dataset": "medicamento_ej_med_E12_1",
+      "umbral_medicamento_ej_med_E12_1": 0.5
+    },
+    "medicamento_ej_med_E12_2": {
+      "siglas dataset": "medicamento_ej_med_E12_2",
+      "umbral_medicamento_ej_med_E12_2": 0.5
+    },
+    "medicamento_ej_med_E13_1": {
+      "siglas dataset": "medicamento_ej_med_E13_1",
+      "umbral_medicamento_ej_med_E13_1": 0.5
+    },
+    "medicamento_ej_med_E13_2": {
+      "siglas dataset": "medicamento_ej_med_E13_2",
+      "umbral_medicamento_ej_med_E13_2": 0.5
+    },
+    "medicamento_2_ej_med_I10_1": {
+      "siglas dataset": "medicamento_2_ej_med_I10_1",
+      "umbral_medicamento_2_ej_med_I10_1": 0.5
+    },
+    "medicamento_2_ej_med_I10_2": {
+      "siglas dataset": "medicamento_2_ej_med_I10_2",
+      "umbral_medicamento_2_ej_med_I10_2": 0.5
+    },
+    "medicamento_2_ej_med_I11": {
+      "siglas dataset": "medicamento_2_ej_med_I11",
+      "umbral_medicamento_2_ej_med_I11": 0.5
+    },
+    "medicamento_2_ej_med_I25": {
+      "siglas dataset": "medicamento_2_ej_med_I25",
+      "umbral_medicamento_2_ej_med_I25": 0.5
+    },
+    "medicamento_2_ej_med_I63": {
+      "siglas dataset": "medicamento_2_ej_med_I63",
+      "umbral_medicamento_2_ej_med_I63": 0.5
+    },
+    "medicamento_2_ej_med_K29": {
+      "siglas dataset": "medicamento_2_ej_med_K29",
+      "umbral_medicamento_2_ej_med_K29": 0.5
+    },
+    "medicamento_2_ej_med_K35": {
+      "siglas dataset": "medicamento_2_ej_med_K35",
+      "umbral_medicamento_2_ej_med_K35": 0.5
+    },
+    "medicamento_2_ej_med_N18": {
+      "siglas dataset": "medicamento_2_ej_med_N18",
+      "umbral_medicamento_2_ej_med_N18": 0.5
+    },
+    "medicamento_2_ej_med_N19": {
+      "siglas dataset": "medicamento_2_ej_med_N19",
+      "umbral_medicamento_2_ej_med_N19": 0.5
+    },
+    "medicamento_3_ej_med_E78": {
+      "siglas dataset": "medicamento_3_ej_med_E78",
+      "umbral_medicamento_3_ej_med_E78": 0.5
+    },
+    "medicamento_3_ej_med_E78.1": {
+      "siglas dataset": "medicamento_3_ej_med_E78.1",
+      "umbral_medicamento_3_ej_med_E78.1": 0.5
+    },
+    "medicamento_3_ej_med_E78.2": {
+      "siglas dataset": "medicamento_3_ej_med_E78.2",
+      "umbral_medicamento_3_ej_med_E78.2": 0.5
+    },
+    "medicamento_3_ej_med_G56": {
+      "siglas dataset": "medicamento_3_ej_med_G56",
+      "umbral_medicamento_3_ej_med_G56": 0.5
+    },
+    "medicamento_3_ej_med_G62.9": {
+      "siglas dataset": "medicamento_3_ej_med_G62.9",
+      "umbral_medicamento_3_ej_med_G62.9": 0.5
+    },
+    "medicamento_3_ej_med_G99.0": {
+      "siglas dataset": "medicamento_3_ej_med_G99.0",
+      "umbral_medicamento_3_ej_med_G99.0": 0.5
+    },
+    "medicamento_3_ej_med_H36": {
+      "siglas dataset": "medicamento_3_ej_med_H36",
+      "umbral_medicamento_3_ej_med_H36": 0.5
+    },
+    "medicamento_3_ej_med_I70": {
+      "siglas dataset": "medicamento_3_ej_med_I70",
+      "umbral_medicamento_3_ej_med_I70": 0.5
+    },
+    "medicamento_3_ej_med_L97": {
+      "siglas dataset": "medicamento_3_ej_med_L97",
+      "umbral_medicamento_3_ej_med_L97": 0.5
+    },
+    "medicamento_4_ej_med_E78.2": {
+      "siglas dataset": "medicamento_4_ej_med_E78.2",
+      "umbral_medicamento_4_ej_med_E78.2": 0.5
+    },
+    "medicamento_4_ej_med_I25": {
+      "siglas dataset": "medicamento_4_ej_med_I25",
+      "umbral_medicamento_4_ej_med_I25": 0.5
+    },
+    "medicamento_4_ej_med_N17": {
+      "siglas dataset": "medicamento_4_ej_med_N17",
+      "umbral_medicamento_4_ej_med_N17": 0.5
+    },
+    "categorias_rec_nutricionales_1_Aumentar Vitamina D": {
+      "siglas dataset": "categorias_rec_nutricionales_1_Aumentar Vitamina D",
+      "umbral_categorias_rec_nutricionales_1_Aumentar Vitamina D": 0.5
+    },
+    "categorias_rec_nutricionales_1_Aumentar alimentos integrales": {
+      "siglas dataset": "categorias_rec_nutricionales_1_Aumentar alimentos integrales",
+      "umbral_categorias_rec_nutricionales_1_Aumentar alimentos integrales": 0.5
+    },
+    "categorias_rec_nutricionales_1_Aumentar zinc": {
+      "siglas dataset": "categorias_rec_nutricionales_1_Aumentar zinc",
+      "umbral_categorias_rec_nutricionales_1_Aumentar zinc": 0.5
+    },
+    "categorias_cons_dietetico_1_Aumentar la toma de pescados azules": {
+      "siglas dataset": "categorias_cons_dietetico_1_Aumentar la toma de pescados azules",
+      "umbral_categorias_cons_dietetico_1_Aumentar la toma de pescados azules": 0.5
+    },
+    "categorias_cons_dietetico_1_Aumentar potasio": {
+      "siglas dataset": "categorias_cons_dietetico_1_Aumentar potasio",
+      "umbral_categorias_cons_dietetico_1_Aumentar potasio": 0.5
+    },
+    "categorias_cons_dietetico_1_Aumentar proteínas": {
+      "siglas dataset": "categorias_cons_dietetico_1_Aumentar proteínas",
+      "umbral_categorias_cons_dietetico_1_Aumentar proteínas": 0.5
+    },
+    "categorias_cons_dietetico_1_Dieta Hipocalórica": {
+      "siglas dataset": "categorias_cons_dietetico_1_Dieta Hipocalórica",
+      "umbral_categorias_cons_dietetico_1_Dieta Hipocalórica": 0.5
+    },
+    "categorias_cons_dietetico_1_Dieta baja en grasas saturadas": {
+      "siglas dataset": "categorias_cons_dietetico_1_Dieta baja en grasas saturadas",
+      "umbral_categorias_cons_dietetico_1_Dieta baja en grasas saturadas": 0.5
+    },
+    "categorias_cons_dietetico_1_Reducir hidratos de carbono": {
+      "siglas dataset": "categorias_cons_dietetico_1_Reducir hidratos de carbono",
+      "umbral_categorias_cons_dietetico_1_Reducir hidratos de carbono": 0.5
+    },
+    "categorias_cons_dietetico_1_Reducir lácteos": {
+      "siglas dataset": "categorias_cons_dietetico_1_Reducir lácteos",
+      "umbral_categorias_cons_dietetico_1_Reducir lácteos": 0.5
+    },
+    "categorias_cons_dietetico_2_Aumentar el consumo de verduras": {
+      "siglas dataset": "categorias_cons_dietetico_2_Aumentar el consumo de verduras",
+      "umbral_categorias_cons_dietetico_2_Aumentar el consumo de verduras": 0.5
+    },
+    "categorias_cons_dietetico_2_Aumentar grasas": {
+      "siglas dataset": "categorias_cons_dietetico_2_Aumentar grasas",
+      "umbral_categorias_cons_dietetico_2_Aumentar grasas": 0.5
+    },
+    "reglas_hiperglucemia": {
+      "siglas dataset": "reglas_hiperglucemia",
+      "umbral_reglas_hiperglucemia": 0.5
+    },
+    "reglas_diabetes": {
+      "siglas dataset": "reglas_diabetes",
+      "umbral_reglas_diabetes": 0.5
+    },
+    "reglas_prediabetes": {
+      "siglas dataset": "reglas_prediabetes",
+      "umbral_reglas_prediabetes": 0.5
+    },
+    "reglas_riesgo_prediabetes": {
+      "siglas dataset": "reglas_riesgo_prediabetes",
+      "umbral_reglas_riesgo_prediabetes": 0.5
+    },
+    "reglas_diabetes_con_vih": {
+      "siglas dataset": "reglas_diabetes_con_vih",
+      "umbral_reglas_diabetes_con_vih": 0.5
+    },
+    "reglas_corr_hba1c_fg": {
+      "siglas dataset": "reglas_corr_hba1c_fg",
+      "umbral_reglas_corr_hba1c_fg": 0.5
+    },
+    "reglas_bajo_nivel_insulina": {
+      "siglas dataset": "reglas_bajo_nivel_insulina",
+      "umbral_reglas_bajo_nivel_insulina": 0.5
+    },
+    "reglas_hipoglucemia": {
+      "siglas dataset": "reglas_hipoglucemia",
+      "umbral_reglas_hipoglucemia": 0.5
+    },
+    "reglas_tension_alta": {
+      "siglas dataset": "reglas_tension_alta",
+      "umbral_reglas_tension_alta": 0.5
+    },
+    "reglas_hipertension": {
+      "siglas dataset": "reglas_hipertension",
+      "umbral_reglas_hipertension": 0.5
+    },
+    "reglas_diabetes_con_hipertension": {
+      "siglas dataset": "reglas_diabetes_con_hipertension",
+      "umbral_reglas_diabetes_con_hipertension": 0.5
+    },
+    "reglas_tratamiento_hipertension": {
+      "siglas dataset": "reglas_tratamiento_hipertension",
+      "umbral_reglas_tratamiento_hipertension": 0.5
+    },
+    "reglas_recomendaciones_estilo_de_vida_hipertension": {
+      "siglas dataset": "reglas_recomendaciones_estilo_de_vida_hipertension",
+      "umbral_reglas_recomendaciones_estilo_de_vida_hipertension": 0.5
+    },
+    "reglas_hipertension_resistente": {
+      "siglas dataset": "reglas_hipertension_resistente",
+      "umbral_reglas_hipertension_resistente": 0.5
+    },
+    "reglas_recomendacion_medicacion_hipertension_con_enfermedad_renal": {
+      "siglas dataset": "reglas_recomendacion_medicacion_hipertension_con_enfermedad_renal",
+      "umbral_reglas_recomendacion_medicacion_hipertension_con_enfermedad_renal": 0.5
+    },
+    "reglas_dislipemia_con_diabetes": {
+      "siglas dataset": "reglas_dislipemia_con_diabetes",
+      "umbral_reglas_dislipemia_con_diabetes": 0.5
+    }
+  }
+  
