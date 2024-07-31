@@ -17,7 +17,8 @@ st.title("Análisis de Clustering con K-means")
 
 # Cargar datos
 # df = pd.read_csv('/archivos/datos_gpt_con_40_ejemplos_reglas_v11.csv')
-df = st.file_uploader("Sube el archivo CSV con los datos", type="csv")
+uploaded_file = st.file_uploader("Sube el archivo CSV con los datos", type="csv")
+df = pd.read_csv(uploaded_file)
 # st.write("Datos cargados", df.head())
 
 ### Limpiamos los datos para poder aplicar algoritmos de clustering
