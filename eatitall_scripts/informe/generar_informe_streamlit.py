@@ -283,10 +283,10 @@ def crear_dataframe_centroides_desviacion(centroids, desviaciones_estandar):
             desviacion = desviaciones_estandar.loc[cluster_id].values
 
             # Verificación de longitudes y contenido
-            print(f"Cluster {cluster_id}:")
-            print(f"Centroide: {centroide}, longitud: {len(centroide)}")
-            print(f"Desviacion: {desviacion}, longitud: {len(desviacion)}")
-            print(f"Columnas: {desviaciones_estandar.columns}, longitud: {len(desviaciones_estandar.columns)}")
+            # print(f"Cluster {cluster_id}:")
+            # print(f"Centroide: {centroide}, longitud: {len(centroide)}")
+            # print(f"Desviacion: {desviacion}, longitud: {len(desviacion)}")
+            # print(f"Columnas: {desviaciones_estandar.columns}, longitud: {len(desviaciones_estandar.columns)}")
 
             df_cluster = pd.DataFrame({
                 'Variable': desviaciones_estandar.columns,
