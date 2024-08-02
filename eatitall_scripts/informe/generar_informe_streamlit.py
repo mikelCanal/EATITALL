@@ -189,38 +189,6 @@ feature_importance['abs_coeficiente'] = feature_importance['coeficiente'].abs()
 feature_sorted=feature_importance.sort_values(by='abs_coeficiente', ascending=False).drop(columns=['abs_coeficiente'])
 st.write("Las variables más significativas para generar cada cluster (regresión lineal):",feature_sorted)
 
-### Los diagnósticos y medicamentos de cada cluster
-
-def from_df_to_json(df, variables='diagnostico_principal'):
-    if variables == 'diagnostico_principal':
-        columnas = df.filter(regex='^dx_principal_').columns.tolist()
-    
-    if variables == 'diagnostico_asociado':
-        columnas = df.filter(regex='^dx_asociados_').columns.tolist()
-
-    if variables =='medicamento':
-        columnas = df.filter(regex='^medicamento').columns.tolist()
-    
-    if variables =='consejo_dietetico':
-        columnas = df.filter(regex='^categorias_cons_dietetico_').columns.tolist()
-
-    if variables =='reglas':
-        columnas = df.filter(regex='^reglas_').columns.tolist()
-
-    recuento = {columna: int(df[columna].sum()) for columna in columnas}
-    
-    # Convertir el diccionario a JSON
-    recuento_json = json.dumps(recuento)
-        
-    return recuento_json
-
-# Definir la función para mostrar resultados ordenados
-def mostrar_ordenado(diccionario, titulo):
-    st.write(f"### {titulo} (de más frecuente a menos frecuente):")
-    # Ordenar el diccionario por los valores de forma descendente
-    for clave, valor in sorted(diccionario.items(), key=lambda item: item[1], reverse=True):
-        st.write(f"{clave}: {valor}")
-
 # ANÁLISIS DE COMBINACIONES EN EL DATASET
 
 def encontrar_combinaciones(df, prefijos_interes, n=4):
@@ -320,6 +288,39 @@ st.text(descripcion_resultado)
 
 # Streamlit UI
 st.title("Exploración de cada categoría para cada cluster")
+
+### Los diagnósticos y medicamentos de cada cluster
+
+def from_df_to_json(df, variables='diagnostico_principal'):
+    if variables == 'diagnostico_principal':
+        columnas = df.filter(regex='^dx_principal_').columns.tolist()
+    
+    if variables == 'diagnostico_asociado':
+        columnas = df.filter(regex='^dx_asociados_').columns.tolist()
+
+    if variables =='medicamento':
+        columnas = df.filter(regex='^medicamento').columns.tolist()
+    
+    if variables =='consejo_dietetico':
+        columnas = df.filter(regex='^categorias_cons_dietetico_').columns.tolist()
+
+    if variables =='reglas':
+        columnas = df.filter(regex='^reglas_').columns.tolist()
+
+    recuento = {columna: int(df[columna].sum()) for columna in columnas}
+    
+    # Convertir el diccionario a JSON
+    recuento_json = json.dumps(recuento)
+        
+    return recuento_json
+
+# Definir la función para mostrar resultados ordenados
+def mostrar_ordenado(diccionario, titulo):
+    st.write(f"### {titulo} (de más frecuente a menos frecuente):")
+    # Ordenar el diccionario por los valores de forma descendente
+    for clave, valor in sorted(diccionario.items(), key=lambda item: item[1], reverse=True):
+        st.write(f"{clave}: {valor}")
+
 
 # Variables disponibles para visualizar
 categorias = {
