@@ -282,10 +282,6 @@ for cluster_label, cluster_df in cluster_dfs.items():
     descripcion_resultado = encontrar_combinaciones(cluster_df, prefijos_interes, n_resultados)
     st.text(descripcion_resultado)
 
-# Mostrar los resultados
-st.subheader("Descripciones de las combinaciones más comunes:")
-st.text(descripcion_resultado)
-
 st.title("Perfiles clínicos")
 st.write("""Se detectan las variables binarias (0 o 1) y se define un umbral para identificar la presencia o ausencia de esa variable.
 
