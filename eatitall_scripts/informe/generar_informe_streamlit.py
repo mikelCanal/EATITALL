@@ -310,7 +310,7 @@ n_resultados = st.slider("Número de combinaciones más comunes a mostrar:", min
 
 # Mostrar los resultados para cada clúster
 for cluster_label, cluster_df in cluster_dfs.items():
-    st.subheader(f"Clúster {cluster_label}")
+    st.subheader(f"Clúster {cluster_label+1}")
     descripcion_resultado = encontrar_combinaciones(cluster_df, prefijos_interes, n_resultados)
     st.text(descripcion_resultado)
 
