@@ -68,7 +68,7 @@ def kmeans_algorithm(df,n_clusters=4,init='k-means++',n_init = 10,max_iter=500,t
     return labels,centroids
 
 # K-means clustering
-k = st.slider("Seleccione el número de clusters", 1, 10, 3)
+k = st.slider("Seleccione el número de clusters", 1, 10, 4)
 labels_kmeans,centroids_kmeans=kmeans_algorithm(df,n_clusters=k,init='k-means++',n_init = 10,max_iter=500,tol=0.0001,random_state= 111,algorithm='elkan')
 df['cluster'] = labels_kmeans
 # st.write(f"Resultados del clustering con {k} clusters", df)
