@@ -351,7 +351,7 @@ if seleccion:
         resultados[cluster_id] = diccionario
 
     # Mostrar los resultados ordenados para cada cluster según la selección del usuario
-    for cluster_id, diccionarios in resultados.items():
+    for cluster_id, diccionario in resultados.items():
         st.write(f"## Resultados para el cluster {cluster_id+1}:")
         mostrar_ordenado(diccionario, categorias[seleccion])
 else:
