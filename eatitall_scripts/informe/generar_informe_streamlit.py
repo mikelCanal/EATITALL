@@ -221,8 +221,105 @@ def mostrar_ordenado(diccionario, titulo):
     for clave, valor in sorted(diccionario.items(), key=lambda item: item[1], reverse=True):
         st.write(f"{clave}: {valor}")
 
+# ANÁLISIS DE COMBINACIONES EN EL DATASET
+
+def encontrar_combinaciones(df, prefijos_interes, n=4):
+    """
+    Encuentra las combinaciones más comunes de 0s y 1s en las variables de interés,
+    considerando registros que tienen al menos una variable con valor 1 en cada categoría.
+    
+    Parámetros:
+    df (pd.DataFrame): DataFrame con los datos.
+    prefijos_interes (dict): Diccionario con los prefijos de las columnas de interés como claves y los nombres amigables como valores.
+    n (int): Número de combinaciones más comunes a retornar.
+    
+    Retorna:
+    str: Descripción de las combinaciones más comunes.
+    """
+    # Filtrar las columnas que pertenecen a los prefijos de interés
+    cols_interes = [col for col in df.columns if any(col.startswith(pref) for pref in prefijos_interes.keys())]
+    
+    # Crear un DataFrame con las columnas seleccionadas
+    df_interes = df[cols_interes]
+    
+    # Crear un DataFrame que combine las columnas de interés en una representación legible
+    combinaciones = pd.DataFrame(index=df.index)
+    for prefijo, nombre in prefijos_interes.items():
+        # Filtrar columnas de la categoría actual
+        cols_categoria = [col for col in cols_interes if col.startswith(prefijo)]
+        # Crear una columna para la categoría con los nombres de las columnas con valor 1
+        combinaciones[nombre] = df[cols_categoria].apply(lambda row: ', '.join(row.index[row == 1].str.replace(prefijo, '')), axis=1)
+    
+    # Contar las filas que no tienen datos (todas las variables son 0) para cada categoría
+    sin_datos = {}
+    for prefijo, nombre in prefijos_interes.items():
+        cols_categoria = [col for col in cols_interes if col.startswith(prefijo)]
+        sin_datos[nombre] = (df[cols_categoria].sum(axis=1) == 0).mean() * 100
+
+    # Filtrar filas donde al menos una columna por categoría no sea ''
+    combinaciones = combinaciones[(combinaciones != '').all(axis=1)]
+    
+    # Contar combinaciones únicas
+    combinaciones_contadas = combinaciones.value_counts().head(n).reset_index()
+    combinaciones_contadas.columns = list(combinaciones.columns) + ['Frecuencia']
+    
+    # Calcular porcentaje
+    combinaciones_contadas['Porcentaje'] = (combinaciones_contadas['Frecuencia'] / len(df)) * 100
+    
+    # Generar descripciones de las combinaciones más comunes
+    descripciones = []
+    for _, row in combinaciones_contadas.iterrows():
+        descripcion = f"el {row['Porcentaje']:.2f}% de los registros tienen " + ", ".join(
+            [f"{cat} {row[cat]}" for cat in prefijos_interes.values() if row[cat]]
+        )
+        descripciones.append(descripcion)
+    
+    # Agregar descripciones de categorías sin datos si no es 0%
+    for nombre, porcentaje in sin_datos.items():
+        if porcentaje > 0:
+            descripciones.append(f"el {porcentaje:.2f}% de los registros no tienen datos sobre la categoría {nombre}")
+    
+    return "\n".join(descripciones)
+
+# Configuración de Streamlit
+st.title('Análisis de Combinaciones en el Dataset')
+
+# Definir prefijos de interés y sus nombres amigables
+todos_prefijos_interes = {
+    'dx_principal_': 'diagnóstico principal',
+    'dx_asociados_': 'diagnósticos asociados',
+    'medicamento': 'medicamento',
+    'categorias_cons_dietetico_': 'consejo dietético',
+    'reglas_': 'reglas'
+}
+
+# Seleccionar categorías
+categorias_seleccionadas = st.multiselect(
+    "Selecciona las categorías de interés:",
+    options=list(todos_prefijos_interes.keys()),
+    default=list(todos_prefijos_interes.keys()),
+    format_func=lambda x: todos_prefijos_interes[x]
+)
+
+# Filtrar prefijos de interés seleccionados
+prefijos_interes = {key: todos_prefijos_interes[key] for key in categorias_seleccionadas}
+
+# Seleccionar número de resultados a mostrar
+n_resultados = st.slider("Número de combinaciones más comunes a mostrar:", min_value=1, max_value=10, value=4)
+
+
+# Mostrar los resultados para cada clúster
+for cluster_label, cluster_df in cluster_dfs.items():
+    st.subheader(f"Clúster {cluster_label}")
+    descripcion_resultado = encontrar_combinaciones(cluster_df, prefijos_interes, n_resultados)
+    st.text(descripcion_resultado)
+
+# Mostrar los resultados
+st.subheader("Descripciones de las combinaciones más comunes:")
+st.text(descripcion_resultado)
+
 # Streamlit UI
-st.title("Los diagnósticos y medicamentos de cada cluster")
+st.title("Exploración de cada categoría para cada cluster")
 
 # Variables disponibles para visualizar
 categorias = {
