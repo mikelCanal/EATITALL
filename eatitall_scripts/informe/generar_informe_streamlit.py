@@ -286,10 +286,6 @@ for cluster_label, cluster_df in cluster_dfs.items():
 st.subheader("Descripciones de las combinaciones más comunes:")
 st.text(descripcion_resultado)
 
-# Streamlit UI
-st.title("Exploración de cada categoría para cada cluster")
-
-
 st.title("Perfiles clínicos")
 st.write("""Se detectan las variables binarias (0 o 1) y se define un umbral para identificar la presencia o ausencia de esa variable.
 
@@ -349,6 +345,8 @@ st.dataframe(df_kmeans_centroids_v2)
 
 
 ### Los diagnósticos y medicamentos de cada cluster
+# Streamlit UI
+st.title("Exploración de cada categoría para cada cluster")
 
 def from_df_to_json(df, variables='diagnostico_principal'):
     if variables == 'diagnostico_principal':
