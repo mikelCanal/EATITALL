@@ -289,6 +289,65 @@ st.text(descripcion_resultado)
 # Streamlit UI
 st.title("Exploración de cada categoría para cada cluster")
 
+
+st.title("Perfiles clínicos")
+st.write("""Se detectan las variables binarias (0 o 1) y se define un umbral para identificar la presencia o ausencia de esa variable.
+
+Se almacenan los valores de los umbrales de cada variable en un archivo de configuración json.
+
+Se redondean los resultados con decimales a dos decimales.
+
+Se guardan en un excel los resultados.""")
+
+# Identificamos variables binarias.
+def detect_binary_columns(dataframe):
+    binary_columns = []
+    for column in dataframe.columns:
+        unique_values = dataframe[column].unique()
+        if set(unique_values).issubset({0, 1}):
+            binary_columns.append(column)
+    return binary_columns
+
+binary_columns_full_df = detect_binary_columns(df)
+binary_columns_full_df.append('sexo') #Es binaria pero no de 0,1 sino 1,2
+# print(f"Las columnas binarias son: {binary_columns_full_df}")
+
+# Cargamos el archivo de configuración
+# config_path='./archivos/config_perfiles_clinicos.json'
+# with open(config_path, 'r') as archivo:
+    # config_perfiles_clinicos = json.load(archivo)
+# Cargar el archivo de configuración
+# uploaded_file = st.file_uploader("Sube el archivo de configuración JSON", type="json")
+# if uploaded_file is not None:
+#     config_perfiles_clinicos = json.load(uploaded_file)
+#     st.write("Archivo de configuración cargado exitosamente.")
+
+# Aplicamos los valores definidos en el archivo de configuración para cada variable binaria 
+
+df_kmeans_centroids_v2=df_kmeans_centroids
+for columna in binary_columns_full_df:
+    # nombre_umbral='umbral_'+columna
+    for k in range(0,len(df_kmeans_centroids_v2)):
+        if columna=='sexo':
+            if df_kmeans_centroids_v2[columna][k]>=1.5:
+                df_kmeans_centroids_v2[columna][k]=2
+            else:
+                df_kmeans_centroids_v2[columna][k]=1
+        else:
+            if df_kmeans_centroids_v2[columna][k]>=0.5:
+                df_kmeans_centroids_v2[columna][k]=1    
+            else:
+                df_kmeans_centroids_v2[columna][k]=0 
+
+#Redondeando a dos decimales
+df_kmeans_centroids_v2 = df_kmeans_centroids_v2.apply(lambda x: round(x, 2) if x.dtype == 'float' else x)
+
+df_kmeans_centroids_v2.to_excel('perfiles_clinicos_v7.xlsx', index=False)
+
+st.write("Datos procesados con umbrales aplicados:")
+st.dataframe(df_kmeans_centroids_v2)    
+
+
 ### Los diagnósticos y medicamentos de cada cluster
 
 def from_df_to_json(df, variables='diagnostico_principal'):
@@ -430,63 +489,6 @@ st.download_button(
     file_name="centroides_desviacion_estandar.xlsx",
     mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 )
-
-st.title("Perfiles clínicos")
-st.write("""Se detectan las variables binarias (0 o 1) y se define un umbral para identificar la presencia o ausencia de esa variable.
-
-Se almacenan los valores de los umbrales de cada variable en un archivo de configuración json.
-
-Se redondean los resultados con decimales a dos decimales.
-
-Se guardan en un excel los resultados.""")
-
-# Identificamos variables binarias.
-def detect_binary_columns(dataframe):
-    binary_columns = []
-    for column in dataframe.columns:
-        unique_values = dataframe[column].unique()
-        if set(unique_values).issubset({0, 1}):
-            binary_columns.append(column)
-    return binary_columns
-
-binary_columns_full_df = detect_binary_columns(df)
-binary_columns_full_df.append('sexo') #Es binaria pero no de 0,1 sino 1,2
-# print(f"Las columnas binarias son: {binary_columns_full_df}")
-
-# Cargamos el archivo de configuración
-# config_path='./archivos/config_perfiles_clinicos.json'
-# with open(config_path, 'r') as archivo:
-    # config_perfiles_clinicos = json.load(archivo)
-# Cargar el archivo de configuración
-# uploaded_file = st.file_uploader("Sube el archivo de configuración JSON", type="json")
-# if uploaded_file is not None:
-#     config_perfiles_clinicos = json.load(uploaded_file)
-#     st.write("Archivo de configuración cargado exitosamente.")
-
-# Aplicamos los valores definidos en el archivo de configuración para cada variable binaria 
-
-df_kmeans_centroids_v2=df_kmeans_centroids
-for columna in binary_columns_full_df:
-    # nombre_umbral='umbral_'+columna
-    for k in range(0,len(df_kmeans_centroids_v2)):
-        if columna=='sexo':
-            if df_kmeans_centroids_v2[columna][k]>=1.5:
-                df_kmeans_centroids_v2[columna][k]=2
-            else:
-                df_kmeans_centroids_v2[columna][k]=1
-        else:
-            if df_kmeans_centroids_v2[columna][k]>=0.5:
-                df_kmeans_centroids_v2[columna][k]=1    
-            else:
-                df_kmeans_centroids_v2[columna][k]=0 
-
-#Redondeando a dos decimales
-df_kmeans_centroids_v2 = df_kmeans_centroids_v2.apply(lambda x: round(x, 2) if x.dtype == 'float' else x)
-
-df_kmeans_centroids_v2.to_excel('perfiles_clinicos_v7.xlsx', index=False)
-
-st.write("Datos procesados con umbrales aplicados:")
-st.dataframe(df_kmeans_centroids_v2)    
 
 st.title("Decission Tree")
 
