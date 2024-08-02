@@ -360,24 +360,24 @@ binary_columns_full_df.append('sexo') #Es binaria pero no de 0,1 sino 1,2
 # with open(config_path, 'r') as archivo:
     # config_perfiles_clinicos = json.load(archivo)
 # Cargar el archivo de configuración
-uploaded_file = st.file_uploader("Sube el archivo de configuración JSON", type="json")
-if uploaded_file is not None:
-    config_perfiles_clinicos = json.load(uploaded_file)
-    st.write("Archivo de configuración cargado exitosamente.")
+# uploaded_file = st.file_uploader("Sube el archivo de configuración JSON", type="json")
+# if uploaded_file is not None:
+#     config_perfiles_clinicos = json.load(uploaded_file)
+#     st.write("Archivo de configuración cargado exitosamente.")
 
 # Aplicamos los valores definidos en el archivo de configuración para cada variable binaria 
 
 df_kmeans_centroids_v2=df_kmeans_centroids
 for columna in binary_columns_full_df:
-    nombre_umbral='umbral_'+columna
+    # nombre_umbral='umbral_'+columna
     for k in range(0,len(df_kmeans_centroids_v2)):
         if columna=='sexo':
-            if df_kmeans_centroids_v2[columna][k]>=config_perfiles_clinicos[columna][nombre_umbral]:
+            if df_kmeans_centroids_v2[columna][k]>=1.5:
                 df_kmeans_centroids_v2[columna][k]=2
             else:
                 df_kmeans_centroids_v2[columna][k]=1
         else:
-            if df_kmeans_centroids_v2[columna][k]>=config_perfiles_clinicos[columna][nombre_umbral]:
+            if df_kmeans_centroids_v2[columna][k]>=0.5:
                 df_kmeans_centroids_v2[columna][k]=1    
             else:
                 df_kmeans_centroids_v2[columna][k]=0 
