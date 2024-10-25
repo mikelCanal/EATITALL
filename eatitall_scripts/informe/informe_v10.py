@@ -153,14 +153,14 @@ def to_excel(df):
     output = BytesIO()
     writer = pd.ExcelWriter(output, engine='xlsxwriter')
     df.to_excel(writer, index=False, sheet_name='Sheet1')
-    writer.save()
+    # writer.save()
     processed_data = output.getvalue()
     return processed_data
 
 val = to_excel(df_kmeans_centroids_v2)
-st.download_button(label=f'Descargar perfiles clínicos normalizados como Excel',
+st.download_button(label=f'Descargar clústers normalizados como Excel',
                     data=val,
-                    file_name=f'perfiles_clinicos_norm.xlsx',
+                    file_name=f'clusters_norm.xlsx',
                     mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
 # Crear un diccionario para almacenar DataFrames de cada cluster
