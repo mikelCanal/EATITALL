@@ -14,10 +14,9 @@ from sklearn.preprocessing import StandardScaler
 import json
 from io import BytesIO
 
-import sys
-
-sys.path.insert(1, '/home/eatitall_scripts')
-sys.path.insert(1, '/home/root/pctobs/lib/python3.8/site-packages')
+# import sys
+# sys.path.insert(1, '/home/eatitall_scripts')
+# sys.path.insert(1, '/home/root/pctobs/lib/python3.8/site-packages')
 from definir_reglas import reglas_2024_10_cardiovascular_disease_and_risk_management, reglas_2024_2_diagnosis_and_classification_of_diabetis, reglas_2024_6_glycemic_goals_and_hypoglycemia, reglas_2024_8_obesity
 from normalizar_datos import normalizar_datos, nuevas_variables
 from extraccion_entidades import extraccion_entidades, extraccion_entidades_clasic, anadir_categorias
