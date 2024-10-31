@@ -14,22 +14,130 @@ from sklearn.preprocessing import StandardScaler
 import json
 from io import BytesIO
 
+import sys
 
-# Título de la aplicación
-st.title("Análisis de Clustering con K-means")
+sys.path.insert(1, '/home/eatitall_scripts')
+sys.path.insert(1, '/home/root/pctobs/lib/python3.8/site-packages')
+from definir_reglas import reglas_2024_10_cardiovascular_disease_and_risk_management, reglas_2024_2_diagnosis_and_classification_of_diabetis, reglas_2024_6_glycemic_goals_and_hypoglycemia, reglas_2024_8_obesity
+from normalizar_datos import normalizar_datos, nuevas_variables
+from extraccion_entidades import extraccion_entidades, extraccion_entidades_clasic, anadir_categorias
 
-# Cargar datos
-path='/home/eatitall_scripts/archivos/datos_semibuenos_1_completo_v2.csv'
-# df = pd.read_csv('./archivos/datos_gpt_con_40_ejemplos_reglas v12.csv')
+st.title("Generación automática de perfiles clínicos con recomendaciones nutricionales")
 
+categorias_rec_nutri = st.text_input("Escribe aquí la lista de categorías de las Recomendaciones nutricionales (suplementos). Formato categoría1: descripción de la categoría1; categoría2:descripción de la categoría2; etc. \nEjemplo: hidroferol: vitmaina D, pérdida ósea; diacare: Dieta completa normocalórica e hiperproteica con un perfil cardiosaludable")
+categorias_consejo_dietetico = st.text_input("Escribe aquí la lista de categorías del Consejo dietético. Formato categoría1: descripción de la categoría1; categoría2:descripción de la categoría2; etc. \nEjemplo: dieta_hipocalórica: dieta baja en calorías, restricción de calorías; dieta_osmocalórica: dieta normocalórica")
+
+
+st.write("Cargue los Historiales Clínicos Electrónicos en formato csv con el separador ';'. (Cargar el archivo LABELS)")
 uploaded_file = st.file_uploader("Elige un archivo CSV", type="csv")
 
 if uploaded_file is not None:
     # Para leer el archivo CSV
-    df = pd.read_csv(uploaded_file)
+    df = pd.read_csv(uploaded_file,sep=';')
     # Mostrar el dataframe en la aplicación
 else:
     st.write("Por favor, carga un archivo CSV.")
+
+def convert_df_to_bytes(df_str):
+    """
+    Convierte el string de un CSV a un formato adecuado para la descarga en Streamlit.
+    """
+    return BytesIO(df_str.encode())
+
+
+config_path='/home/eatitall_scripts/definir_reglas/config.json'
+
+with open(config_path, 'r') as archivo:
+    config = json.load(archivo)
+
+
+df=normalizar_datos.convertir_si_no_a_0_1(df)
+df=normalizar_datos.convertir_mujer_hombre_a_1_2(df)
+df=normalizar_datos.convertir_lugar_nac_a_numero(df)
+df=normalizar_datos.convertir_dm_tipo_a_numero(df)
+df=normalizar_datos.convertir_ic_tipo_a_numero(df)
+df=normalizar_datos.convertir_careme_estadio_a_numero(df)
+df=normalizar_datos.convertir_intolerancias_a_numero(df)
+df=normalizar_datos.eliminar_variables(df,variables=['Record ID','Código del paciente','Presión arterial','Pauta de ejercicio físico recomendada','Complete?','Complete?.1','Complete?.2'],eliminar_nans=False)
+df=normalizar_datos.fecha_a_timestamp(df,variables=['Fecha diagnóstico DM'])
+df=normalizar_datos.comas_a_puntos(df,variables=['FIB-4','Densidad'])
+df=normalizar_datos.ajustar_decimal_dividir_por_mil(df,variables=['FIB-4'])
+df=normalizar_datos.ajustar_punto_decimal(df,variables=['Densidad'])
+df=normalizar_datos.gestionar_nans(df)
+df=normalizar_datos.texto_libre_a_categorias(df,variable='Recomendaciones nutricionales recibidas',categorias=categorias_rec_nutri)
+df=normalizar_datos.texto_libre_a_categorias(df,variable='Consejo dietético',categorias=categorias_consejo_dietetico)
+
+
+csv = df.to_csv(index=False)
+b64 = convert_df_to_bytes(csv)
+
+# Crear el botón de descarga para esta combinación
+st.download_button(
+    label=f"Descargar datos normalizados como CSV",
+    data=b64,
+    file_name=f"data_norm.csv",
+    mime='text/csv',
+    key=f"data_norm"
+        )
+
+df=reglas_2024_2_diagnosis_and_classification_of_diabetis.añadir_reglas(df,config)
+df=reglas_2024_6_glycemic_goals_and_hypoglycemia.añadir_reglas(df,config)
+df=reglas_2024_10_cardiovascular_disease_and_risk_management.añadir_reglas(df,config)
+df=reglas_2024_8_obesity.añadir_reglas(df,config)
+
+csv = df.to_csv(index=False)
+b64 = convert_df_to_bytes(csv)
+
+# Crear el botón de descarga para esta combinación
+st.download_button(
+    label=f"Descargar datos normalizados y con las reglas como CSV",
+    data=b64,
+    file_name=f"data_norm_reglas.csv",
+    mime='text/csv',
+    key=f"data_norm_reglas"
+        )
+
+df=extraccion_entidades.otras_ecv(df,variables=['Otras ECV']) #dummy vars
+df=extraccion_entidades.dx_principal(df,variables=['Diagnósticos principal']) #dummy vars
+df=extraccion_entidades.dx_secundario(df,variables=['Diagnósticos asociados','Diagnósticos asociados.1','Diagnósticos asociados.2',
+                                                    'Diagnósticos asociados.3','Diagnósticos asociados.4'])
+df=extraccion_entidades.medicamentos(df,variables=['Medicamento','Medicamento.1','Medicamento.2','Medicamento.3','Medicamento.4',
+                                                   'Medicamento.5','Medicamento.6','Medicamento.7','Medicamento.8',
+                                                   'Medicamento.9','Medicamento.10','Medicamento.11'])
+df=extraccion_entidades.rec_nutricionales(df,variable='Recomendaciones nutricionales recibidas')
+df=extraccion_entidades.cons_dietetico(df,variable='Consejo dietético')
+df=extraccion_entidades.juicio_cl(df)
+# # Generamos un csv con los datos generados con las reglas y lo guardamos
+
+# df=normalizar_datos.gestionar_nans(df)
+
+csv = df.to_csv(index=False)
+b64 = convert_df_to_bytes(csv)
+
+# Crear el botón de descarga para esta combinación
+st.download_button(
+    label=f"Descargar datos normalizados, con las reglas y extracción de entidades como CSV",
+    data=b64,
+    file_name=f"data_norm_reglas_extraccion_entidades.csv",
+    mime='text/csv',
+    key=f"data_norm_reglas_extraccion_entidades"
+        )
+
+# Título de la aplicación
+st.title("Análisis de Clustering con K-means")
+
+# # Cargar datos
+# path='/home/eatitall_scripts/archivos/datos_semibuenos_1_completo_v2.csv'
+# # df = pd.read_csv('./archivos/datos_gpt_con_40_ejemplos_reglas v12.csv')
+
+# uploaded_file = st.file_uploader("Elige un archivo CSV", type="csv")
+
+# if uploaded_file is not None:
+#     # Para leer el archivo CSV
+#     df = pd.read_csv(uploaded_file)
+#     # Mostrar el dataframe en la aplicación
+# else:
+#     st.write("Por favor, carga un archivo CSV.")
 
 # st.write("Datos cargados (normalizados y pasados a variables numéricas)", df)
 
@@ -95,12 +203,12 @@ def detect_binary_columns(dataframe):
     return binary_columns
 
 binary_columns_full_df = detect_binary_columns(df)
-binary_columns_full_df.append('sexo')
-binary_columns_full_df.append('lugar_nac')
-binary_columns_full_df.append('dm')
-binary_columns_full_df.append('ic_tipo')
-binary_columns_full_df.append('careme_estadio')
-binary_columns_full_df.append('rockwood') #Es binaria pero no de 0,1 sino 1,2
+binary_columns_full_df.append('Sexo') #Añadimos todas las variables que solo pueden tener un valor entero
+binary_columns_full_df.append('Lugar de nacimiento')
+binary_columns_full_df.append('DM tipo')
+binary_columns_full_df.append('IC tipo')
+binary_columns_full_df.append('Estadio Sd CaReMe')
+binary_columns_full_df.append('Índice de Fragilidad Rockwood') #Es binaria pero no de 0,1 sino 1,2
 # print(f"Las columnas binarias son: {binary_columns_full_df}")
 
 # Cargamos el archivo de configuración
@@ -124,12 +232,12 @@ df_kmeans_centroids_v2=df_kmeans_centroids
 for columna in binary_columns_full_df:
     # nombre_umbral='umbral_'+columna
     for k in range(0,len(df_kmeans_centroids_v2)):
-        if columna=='sexo':
+        if columna=='Sexo':
             if df_kmeans_centroids_v2[columna][k]>=1.5:
                 df_kmeans_centroids_v2[columna][k]=2
             else:
                 df_kmeans_centroids_v2[columna][k]=1
-        elif columna=='lugar_nac' or columna=='dm' or columna=='ic_tipo' or columna=='careme_estadio' or columna=='rockwood':
+        elif columna=='Lugar de nacimiento' or columna=='DM tipo' or columna=='IC tipo' or columna=='Estadio Sd CaReMe' or columna=='Índice de Fragilidad Rockwood':
             df_kmeans_centroids_v2[columna][k]=df_kmeans_centroids_v2[columna][k].round(0)
         else:
             if df_kmeans_centroids_v2[columna][k]>=0.5:
@@ -141,28 +249,25 @@ for columna in binary_columns_full_df:
 df_kmeans_centroids_v2 = df_kmeans_centroids_v2.apply(lambda x: round(x, 2) if x.dtype == 'float' else x)
 
 # df_kmeans_centroids_v2.to_excel('perfiles_clinicos_v7.xlsx', index=False)
-df_kmeans_centroids_v2['f_dx_dm'] = pd.to_datetime(df_kmeans_centroids_v2['f_dx_dm'], unit='s')
-df_kmeans_centroids_v2['f_dx_dm'] = df_kmeans_centroids_v2['f_dx_dm'].dt.strftime('%Y-%m-%d')
+df_kmeans_centroids_v2['Fecha diagnóstico DM'] = pd.to_datetime(df_kmeans_centroids_v2['Fecha diagnóstico DM'], unit='s')
+df_kmeans_centroids_v2['Fecha diagnóstico DM'] = df_kmeans_centroids_v2['Fecha diagnóstico DM'].dt.strftime('%Y-%m-%d')
 
 # st.write("Datos procesados con umbrales aplicados:")
 st.dataframe(df_kmeans_centroids_v2)  
 
 # st.title('Descargar clusters en formato Excel')
 
-def to_excel(df):
-    output = BytesIO()
-    writer = pd.ExcelWriter(output, engine='xlsxwriter')
-    df.to_excel(writer, index=False, sheet_name='Sheet1')
-    # writer.save()
-    processed_data = output.getvalue()
-    return processed_data
+csv = df_kmeans_centroids_v2.to_csv(index=False)
+b64 = convert_df_to_bytes(csv)
 
-val = to_excel(df_kmeans_centroids_v2)
-st.download_button(label=f'Descargar clústers normalizados como Excel',
-                    data=val,
-                    file_name=f'clusters_norm.xlsx',
-                    mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-
+# Crear el botón de descarga para esta combinación
+st.download_button(
+    label=f"Descargar clústers normalizados como CSV",
+    data=b64,
+    file_name=f"clusters_norm.csv",
+    mime='text/csv',
+    key=f"clusters_norm"
+        )
 # Crear un diccionario para almacenar DataFrames de cada cluster
 cluster_dfs = {}
 
@@ -176,11 +281,18 @@ for cluster_label in range(len(df_kmeans_centroids_v2)):
 # Mostrar los DataFrames de cada cluster y guardarlos en local
 for cluster_label, cluster_df in cluster_dfs.items():
     # if st.button('Descargar Excel'):
-    val = to_excel(cluster_df)
-    st.download_button(label=f'Descargar listado de pacientes del clúster (perfil clínico) {cluster_label} como Excel',
-                    data=val,
-                    file_name=f'cluster_{cluster_label}.xlsx',
-                    mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    csv = cluster_df.to_csv(index=False)
+    b64 = convert_df_to_bytes(csv)
+
+    # Crear el botón de descarga para esta combinación
+    st.download_button(
+    label=f'Descargar listado de pacientes del clúster (perfil clínico) {cluster_label} como Excel',
+    data=b64,
+    file_name=f"cluster_{cluster_label}.csv",
+    mime='text/csv',
+    key=f"cluster_{cluster_label}"
+        )
+
     # print(f"DataFrame del Cluster {cluster_label}:\n")
     # print(cluster_df)
     # print("\n\n")
@@ -308,14 +420,8 @@ def encontrar_combinaciones(df, prefijos_interes, n_cluster, n=4):
 
     return combinaciones_df_list,feature_sorted_subcluster,"\n".join(descripciones)
 
-def convert_df_to_bytes(df_str):
-    """
-    Convierte el string de un CSV a un formato adecuado para la descarga en Streamlit.
-    """
-    return BytesIO(df_str.encode())
 
-
-def contar_variables_frecuentes(df, prefijo='rec_nutricionales_', N=5):
+def contar_variables_frecuentes(df, prefijo='Recomendaciones nutricionales recibidas', N=5):
     """
     Cuenta las variables que comienzan con un prefijo determinado y muestra las N más frecuentes.
     
@@ -350,11 +456,11 @@ def contar_variables_frecuentes(df, prefijo='rec_nutricionales_', N=5):
 
 # Definir prefijos de interés y sus nombres amigables
 todos_prefijos_interes = {
-    'dx_principal_': 'diagnóstico principal',
-    'dx_asociados_': 'diagnósticos asociados',
-    'medicamento': 'medicamento',
-    'rec_nutri': 'recomendaciones nutricionales',
-    'cons_dietetico': 'consejo dietético',
+    'Diagnósticos principal': 'diagnóstico principal',
+    'Diagnósticos asociados': 'diagnósticos asociados',
+    'Medicamento': 'medicamento',
+    'Recomendaciones nutricionales recibidas': 'recomendaciones nutricionales',
+    'Consejo dietético': 'consejo dietético',
     'reglas ': 'reglas'
 }
 
@@ -383,9 +489,9 @@ for cluster_label, cluster_df in cluster_dfs.items():
     pc=1
     col1, col2 = st.columns(2)
     for df_i in combinaciones_df_list:
-        top_frecuentes_df_rec_nutri=contar_variables_frecuentes(df_i, prefijo='rec_nutricionales_', N=5)
+        top_frecuentes_df_rec_nutri=contar_variables_frecuentes(df_i, prefijo='Recomendaciones nutricionales recibidas', N=5)
         # st.dataframe(top_frecuentes_df_rec_nutri)
-        top_frecuentes_df_cons_diet=contar_variables_frecuentes(df_i, prefijo='cons_dietetico_', N=5)
+        top_frecuentes_df_cons_diet=contar_variables_frecuentes(df_i, prefijo='Consejo dietético', N=5)
         # st.dataframe(top_frecuentes_df_cons_diet)
         # En la primera columna colocas el primer DataFrame
         with col1:
@@ -501,10 +607,10 @@ st.write("Las variables más significativas para generar cada cluster (regresió
 
 nombres_de_variables = feature_importance['porcentaje'].index.tolist()
 
-lista_corr_dx = [elemento for elemento in nombres_de_variables if elemento.startswith('dx_')]
-lista_corr_medicamento = [elemento for elemento in nombres_de_variables if elemento.startswith('medicamento_')]
+lista_corr_dx = [elemento for elemento in nombres_de_variables if elemento.startswith('Diagnósticos')]
+lista_corr_medicamento = [elemento for elemento in nombres_de_variables if elemento.startswith('Medicamento')]
 lista_corr_reglas = [elemento for elemento in nombres_de_variables if elemento.startswith('reglas ')]
-lista_corr_nutricion = [elemento for elemento in nombres_de_variables if (elemento.startswith('rec_nutri') or elemento.startswith('cons_dietetico_'))]
+lista_corr_nutricion = [elemento for elemento in nombres_de_variables if (elemento.startswith('Recomendaciones nutricionales recibidas') or elemento.startswith('Consejo dietético'))]
 # Crear una lista combinada de elementos a eliminar
 elementos_a_eliminar = set(lista_corr_dx + lista_corr_medicamento + lista_corr_reglas + lista_corr_nutricion)
 
@@ -547,16 +653,16 @@ st.title("Exploración de cada categoría para cada cluster")
 
 def from_df_to_json(df, variables='diagnostico_principal'):
     if variables == 'diagnostico_principal':
-        columnas = df.filter(regex='^dx_principal_').columns.tolist()
+        columnas = df.filter(regex='^Diagnósticos principal').columns.tolist()
     
     if variables == 'diagnostico_asociado':
-        columnas = df.filter(regex='^dx_asociados_').columns.tolist()
+        columnas = df.filter(regex='^Diagnósticos asociados').columns.tolist()
 
     if variables =='medicamento':
-        columnas = df.filter(regex='^medicamento').columns.tolist()
+        columnas = df.filter(regex='^Medicamento').columns.tolist()
     
     if variables =='consejo_dietetico':
-        columnas = df.filter(regex='^categorias_cons_dietetico_').columns.tolist()
+        columnas = df.filter(regex='^Consejo dietético').columns.tolist()
 
     if variables =='reglas':
         columnas = df.filter(regex='^reglas ').columns.tolist()
