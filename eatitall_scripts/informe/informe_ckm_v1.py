@@ -1694,15 +1694,15 @@ def convert_df_to_bytes(df_str):
     """
     return BytesIO(df_str.encode())
 
-st.write("Vuelve a cargar los Historiales Clínicos Electrónicos en formato csv con el separador ';'. (Cargar el archivo LABELS)")
-uploaded_file = st.file_uploader("Elige un archivo CSV", type="csv")
+# st.write("Vuelve a cargar los Historiales Clínicos Electrónicos en formato csv con el separador ';'. (Cargar el archivo LABELS)")
+# uploaded_file = st.file_uploader("Elige un archivo CSV", type="csv")
 
-if uploaded_file is not None:
-    # Para leer el archivo CSV
-    df = pd.read_csv(uploaded_file,sep=';')
-    # Mostrar el dataframe en la aplicación
-else:
-    st.write("Por favor, carga un archivo CSV.")
+# if uploaded_file is not None:
+#     # Para leer el archivo CSV
+#     df = pd.read_csv(uploaded_file,sep=';')
+#     # Mostrar el dataframe en la aplicación
+# else:
+#     st.write("Por favor, carga un archivo CSV.")
 
 config_path='config.json'
 
