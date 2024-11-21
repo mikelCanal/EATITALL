@@ -1695,7 +1695,7 @@ def convert_df_to_bytes(df_str):
     return BytesIO(df_str.encode())
 
 
-config_path='/home/eatitall_scripts/definir_reglas/config.json'
+config_path='config.json'
 
 with open(config_path, 'r') as archivo:
     config = json.load(archivo)
