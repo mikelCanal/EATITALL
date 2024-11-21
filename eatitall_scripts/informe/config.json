@@ -1,0 +1,300 @@
+{
+    "variables": {
+        "informacion_basica":{
+            "edad": {"siglas dataset":"edad"},
+            "año_nacimiento":{"siglas dataset":"f_nacimiento"},
+            "genero":{"siglas dataset": "Sexo"},
+            "phisical_inactivity":{"siglas dataset":"phisical_inactivity"}
+        },
+        "situacion_clinica":{
+            "diagnosticos":{
+                "ecr_kdigo":{"siglas dataset":"ecr_kdigo",
+                            "nombre completo español":""},
+                "comp_oftalmicas":{"siglas dataset":"comp_oftalmicas",
+                                    "nombre completo español":""},
+                "neuropatia":{"siglas dataset":"neuropatia",
+                                "nombre completo español":""},
+                "arterio_per":{"siglas dataset":"arterio_per",
+                                "nombre completo español":""},
+                "cardio_isq":{"siglas dataset":"cardio_isq",
+                                "nombre completo español":""},
+                "ins_card":{"siglas dataset":"ins_card",
+                            "nombre completo español":""},
+                "insulina_dep":{"siglas dataset":"insulina_dep",
+                                "nombre completo español":""},
+                "desnutricion":{"siglas dataset":"desnutricion",
+                                "nombre completo español":"desnutricion"},
+                "tras_pancreaticos":{"siglas dataset":"tras_pancreaticos",
+                                    "nombre completo español":""},
+                "ic_tipo":{"siglas dataset":"ic_tipo",
+                            "nombre completo español":""},
+                "otras_ecv":{"siglas dataset":"otras_ecv",
+                                "nombre completo español":""},
+                "careme_estadio":{"siglas dataset":"careme_estadio",
+                                    "nombre completo español":""},
+                "diagnostico_principal":{"siglas dataset":"dx_principal",
+                                            "nombre completo español":"diagnóstico principal"},
+                "diagnosticos_asociados":{"siglas dataset":"dx_asociados",
+                                            "nombre completo español":"diagnósticos asociados"},
+                "enfermedad_cv":{"siglas dataset":"enfermedad_cv"},
+                "enfermedad_renal":{"siglas dataset":"enfermedad_renal"},
+                "diabetes":{"siglas dataset":"diabetes"},
+                "dislipemia":{"siglas dataset": "dislipemia"},
+                "hipertension":{"siglas dataset":"hipertension"},
+                "polycystic_ovary_sindrom":{"siglas dataset":"polycystic_ovary_sindrom"},
+                "acanthosis_nigricans":{"siglas dataset":"acanthosis_nigricans"},
+                "factor_riesgo_cv":{"siglas dataset":"factor_riesgo_cv",
+                                "nombre completo español":"factor de riesgo cardiovascular"},
+                "terapia_con_estatinas":{"siglas dataset":"terapia_con_estatinas"},
+                "intolerante_estatinas":{"siglas dataset":"intolerante_estatinas"},
+                "vih":{"siglas dataset":"vih"},
+                "pancreatitis":{"siglas dataset":""},
+                "acv": {"siglas dataset":"acv",
+                        "nombre completo español":"accidente cardiovascualr"},
+                "hiperglucemia":{"siglas dataset":"hiperglucemia"},
+                "gdm":{"siglas dataset":"gdm"},
+                "cad":{"siglas dataset":"cad",
+                        "nombre completo español":"coronary artery disease"}
+            },
+            "medicacion":{
+                "estatina": {"siglas dataset":"estatina"},
+                "diuretic":{"siglas dataset":"diuretic"},
+                "two_antihypertensive":{"siglas dataset":"two_antihypertensive"}
+            }
+        },
+        "mediciones_generales":{
+            "peso": {"siglas dataset":"peso",
+                         "unidad":"kg"},
+            "talla": {"siglas dataset":"talla",
+                        "unidad":"m"},
+            "imc": {"siglas dataset":"IMC",
+                    "siglas alternativas":[],
+                    "nombre completo español":["ínidice de masa corporal"],
+                    "nombre completo inglés":["body mass index"],
+                    "unidad":"kg/m^2"},
+            "tas": {"siglas dataset":"Presión arterial sistólica",
+                    "siglas alternativas":[],
+                    "nombre completo español":["tensión/presión arterial sistólica"],
+                    "nombre completo inglés":"",
+                    "unidad":"mmHg"},
+            "tad": {"siglas dataset":"Presión arterial diastólica",
+                    "siglas alternativas":[],
+                    "nombre completo español":["tensión/presión arterial diastólica"],
+                    "nombre completo inglés":[],
+                    "unidad":"mmHg"}
+        },
+        "analisis_sangre":{
+            "hba1c": {"siglas dataset":"Hemoglobina glicosilada",
+                "siglas alternativas":["a1c,hba1c"],
+                "nombre completo español":["hemoglobina glicada o glucosilada"],
+                "nombre completo inglés":["fasting plasma glucose"],
+                "unidad":"%",
+                "niveles":{
+                    "porcentaje":[5,6,7,8,9,10,11,12],
+                    "mg_dL":[97,126,154,183,212,240,269.298],
+                    "mg_dL_intervalos":["76-120","100-152","123-185","147-217","170-249","193-282",
+                                        "217-314","240-347"],
+                    "mmol_L":[5.4,7.0,8.6,10.2,11.8,13.4,14.9,16.5],
+                    "mmol_L_intervalos":["4.2-6.7","5.5-8.5","6.8-10.3","8.1-12.1","9.4-13.9","10.7-15.7",
+                                        "12.0-17.5","13.3-19.3"]
+                }},
+            "ldl":{"siglas dataset":"LDL",
+                    "unidad":"mg/dl"},
+            "hdl":{"siglas dataset":"HDL",
+                    "unidad":"mg/dl"},                
+            "tg": {"siglas dataset":"TG",
+                    "nombre completo español":"trigliceridos",
+                    "unidad":"mg/dl"},
+            "fg": {"siglas dataset":"Glucemia en ayunas",
+                "siglas alternativas":["fpg","gpa","ga","glucA","gluA"],
+                "nombre completo español":["glucemia plasmática en ayunas"],
+                "nombre completo inglés":["fasting plasma glucose"],
+                    "unidad":"mg/dl"},
+            "pg2h_75g_ogtt": {"siglas dataset":"pg2h_75g_ogtt",
+                "siglas alternativas":["glu","gp"],
+                "nombre completo español":["glucemia plasmática"],
+                "nombre completo inglés":["2-h plasma glucose (2-h PG) value during a 75-g oral glucose tolerance test (OGTT)"]},       
+            "ga": {"siglas dataset":"glucemia_ayunas_aleatoria",
+                "siglas alternativas":[],
+                "nombre completo español":["prueba de glucosa (glucemia plasmática) aleatoria"],
+                "nombre completo inglés":["random plasma glucose"]},
+            "insulina":{"siglas dataset":"Insulina",
+                        "unidad":"U/ml"},
+            "glucosa":{"siglas dataset":"glucosa"} 
+            },
+        "analisis_orina":{
+            "albumina_creatinina":{"siglas dataset":"albumina_creatinina",
+                                    "unidad":"mcg/min"}
+            }
+        },
+    "parametros": {
+        "hiperglucemia":{
+            "ga_umbral_inferior":200
+        },
+        "hiperglucemia_severa":{
+            "ga_umbral_inferior":200,
+            "hba1c_umbral_inferior": 5.7
+        },
+        "diabetes":{
+            "hba1c_umbral_inferior":6.5,
+            "fg_umbral_inferior":110,
+            "pg2h_75g_ogtt_umbral_inferior":200,
+            "ga_umbral_inferior":200
+        },
+        "riesgo_prediabetes": {
+            "imc_umbral_inferior": 25,
+            "tas_umbral_inferior": 130,
+            "tad_umbral_inferior": 80,
+            "tg_umbral_inferior": 250,
+            "hba1c_umbral_inferior": 5.7,
+            "pg2h_75g_ogtt_umbral_inferior":140,
+            "pg2h_75g_ogtt_umbral_superior":199,
+            "hdl_umbral_superior":35,
+            "gdm_identificador":1,
+            "vih_identificador":1,
+            "pancreatitis_identificador":1,
+            "obesidad_umbral_inferior":45,
+            "acv_identificador":1,
+            "polycystic_ovary_sindrome_identificador":1,
+            "phisical_inactivity_identificador":1,
+            "acanthosis_nigricans_identificador":1
+        },
+        "prediabetes":{
+            "hba1c_umbral_inferior":5.7,
+            "hba1c_umbral_superior":6.4,
+            "fg_umbral_inferior": 100,
+            "fg_umbral_superior": 125,
+            "pg2h_75g_ogtt_umbral_inferior":140,
+            "pg2h_75g_ogtt_umbral_superior":190
+        },
+        "tension_alta":{
+            "tas_umbral_inferior": 120,
+            "tas_umbral_superior": 130
+        },
+        "hipertension": {
+            "tas_umbral_inferior": 130,
+            "tad_umbral_inferior": 80
+        },
+        "cardiovascular": {
+            "identificador": 1
+        },
+        "lipidos": {
+            "tg_umbral_inferior": 150
+        },
+        "estatina": {
+            "identificador": 1
+        },
+        "mayores_de_65_saludable": {
+            "fg_umbral_inferior": 80,
+            "fg_umbral_superior": 130,
+            "tas_umbral_superior": 130,
+            "tad_umbral_superior": 80
+        },
+        "mayores_de_65_compleja": {
+            "fg_umbral_inferior": 90,
+            "fg_umbral_superior": 150,
+            "tas_umbral_superior": 130,
+            "tad_umbral_superior": 80
+        },
+        "mayores_de_65_muy_compleja": {
+            "fg_umbral_inferior": 100,
+            "fg_umbral_superior": 180,
+            "tas_umbral_superior": 140,
+            "tad_umbral_superior": 90
+        },
+        "vih":{"identificador":1},
+        "corr_hba1c_fg":
+            {"porcentaje_hba1c_5":5,
+            "porcentaje_hba1c_6":6,
+            "porcentaje_hba1c_7":7,
+            "porcentaje_hba1c_8":8,
+            "porcentaje_hba1c_9":9,
+            "porcentaje_hba1c_10":10,
+            "porcentaje_hba1c_11":11,
+            "porcentaje_hba1c_12":12,
+            "hba1c_5_umbral_inferior":76,
+            "hba1c_5_umbral_superior":120,
+            "hba1c_6_umbral_inferior":100,
+            "hba1c_6_umbral_superior":152,
+            "hba1c_7_umbral_inferior":123,
+            "hba1c_7_umbral_superior":185,
+            "hba1c_8_umbral_inferior":147,
+            "hba1c_8_umbral_superior":217,
+            "hba1c_9_umbral_inferior":170,
+            "hba1c_9_umbral_superior":249,
+            "hba1c_10_umbral_inferior":193,
+            "hba1c_10_umbral_superior":282,
+            "hba1c_11_umbral_inferior":217,
+            "hba1c_11_umbral_superior":314,
+            "hba1c_12_umbral_inferior":240,
+            "hba1c_12_umbral_superior":347},
+        "hipoglucemia":{
+            "nivel1_glucosa_umbral_inferior":54,
+            "nivel1_glucosa_umbral_superior":70,
+            "nivel2_glucosa_umbral_superior":54
+        },
+        "bajo_nivel_insulina":{
+            "insulina_umbral_inferior":5
+        },
+        "tratamiento_hipertension":{
+            "tas_umbral_inferior":140,
+            "tad_umbral_inferior":90
+        },
+        "presion_arterial_ligeramente_elevada":{
+            "tas_umbral_inferior":120,
+            "tad_umbral_inferior":80
+        },
+        "medicacion_hipertension_start_one":{
+            "tas_umbral_inferior":130,
+            "tas_umbral_superior":150,
+            "tad_umbral_inferior":80,
+            "tad_umbral_superior":90
+        },
+        "medicacion_hipertension_ACEI_or_ARB":{
+            "tas_umbral_inferior":130,
+            "tas_umbral_superior":150,
+            "tad_umbral_inferior":80,
+            "tad_umbral_superior":90
+        },
+        "medicacion_hipertension_start_from_2":{
+            "tas_umbral_inferior":150,
+            "tad_umbral_inferior":90
+        },
+        "medicacion_hipertension_ACEI_or_ARB_and_CCB_or_Diuretic":{
+            "tas_umbral_inferior":130,
+            "tas_umbral_superior":150,
+            "tad_umbral_inferior":80,
+            "tad_umbral_superior":90
+        },
+        "hipertension_resistente":{
+            "tas_umbral_inferior":140,
+            "tad_umbral_inferior":90
+        },
+        "dislipemia_con_diabetes":{
+            "tg_umbral_superior":150,
+            "hdl_umbral_superior_hombre":40,
+            "hdl_umbral_superior_mujer":50
+        },
+        "hipertriglicidemia":{
+            "tg_umbral":150
+        },
+        "baja_lipoproteina_hdl":{
+            "hdl_umbral_hombres":40,
+            "hdl_umbral_mujeres":50
+        },
+        "hipercolesterolemia":{
+            "ldl_umbral":70
+        },
+        "obesidad_clase_i":{
+            "obesidad_clase_i_umbral_inferior":30,
+            "obesidad_clase_i_umbral_superior":35
+        },
+        "obesidad_clase_ii":{
+            "obesidad_clase_ii_umbral_inferior":35,
+            "obesidad_clase_ii_umbral_superior":40
+        },
+        "obesidad_clase_iii":{
+            "obesidad_clase_iii_umbral":40
+        }
+    }
+}
