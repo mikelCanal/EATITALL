@@ -2,3 +2,4 @@ streamlit
 ollama
 matplotlib
 scikit-learn
+XlsxWriter
