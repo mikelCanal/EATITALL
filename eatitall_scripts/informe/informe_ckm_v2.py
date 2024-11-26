@@ -45,18 +45,60 @@ class ckm:
 
     def ckm2(df,config):
         tg=config['variables']['analisis_sangre']['tg']['siglas dataset']
-        tg_umbral=config['parametros']['hipertriglicidemia']['tg_umbral']
-        hipertriglicidemia=f'reglas hipertriglicidemia ({tg}>{tg_umbral})'
+        tg_umbral=config['parametros']['riesgo_hipertrigliceridemia']['tg_umbral']
+        riesgo_hipertrigliceridemia=f'reglas riesgo hipertriglicidemia ({tg}>{tg_umbral})'
         tas = config['variables']['mediciones_generales']['tas']['siglas dataset']
         tad = config['variables']['mediciones_generales']['tad']['siglas dataset']
         tas_umbral_inferior = config['parametros']['hipertension']['tas_umbral_inferior']
         tad_umbral_inferior = config['parametros']['hipertension']['tad_umbral_inferior']
         hipertension=f'reglas hipertension ({tas}>{tas_umbral_inferior} o {tad}>{tad_umbral_inferior})'
+        ga = config['variables']['analisis_sangre']['ga']['siglas dataset']  # se asume 1que ahora ga está definido en config
+        hdl = config['variables']['analisis_sangre']['hdl']['siglas dataset']
+        hdl_umbral_hombres_mets = ['parametros']['mets']['hdl_hombres_umbral']
+        genero = config['variables']['informacion_basica']['genero']['siglas dataset']
+        hdl_umbral_mujeres_mets = ['parametros']['mets']['hdl_mujeres_umbral']
+        tas_umbral_mets = ['parametros']['mets']['tas_umbral']
+        tad_umbral_mets = ['parametros']['mets']['tad_umbral']
+        ga_umbral_mets = ['parametros']['mets']['ga_umbral']
+        tg_umbral_mets = ['parametros']['mets']['tg_umbral']
+        # medicacion_hipertension = config['medicacion']['hipertension']
         df['ckm2']=0
         for k in range(0,len(df)):
-            if df[hipertriglicidemia][k]==1 or df[hipertension][k]==1: #or diabetes==1
+            if df[riesgo_hipertrigliceridemia][k]==1 or df[hipertension][k]==1: #or df[diabetes][k]==1: 
                 df['ckm2'][k]=1
-
+            #MetS
+            if ((df[hdl][k]<hdl_umbral_hombres_mets and df[genero][k]==1) or (df[hdl][k]<hdl_umbral_mujeres_mets and df[genero][k]==2) 
+                and df[tg][k]>=tg_umbral_mets 
+                and (df[tas][k]>=tas_umbral_mets or df[tad][k]>=tad_umbral_mets)):
+                df['ckm2'][k]=1
+            if ((df[hdl][k]<hdl_umbral_hombres_mets and df[genero][k]==1) or (df[hdl][k]<hdl_umbral_mujeres_mets and df[genero][k]==2) 
+                and df[tg][k]>=tg_umbral_mets 
+                and df[ga][k]>=ga_umbral_mets):
+                df['ckm2'][k]=1
+            if ((df[hdl][k]<hdl_umbral_hombres_mets and df[genero][k]==1) or (df[hdl][k]<hdl_umbral_mujeres_mets and df[genero][k]==2) 
+                and (df[tas][k]>=tas_umbral_mets or df[tad][k]>=tad_umbral_mets) 
+                and df[ga][k]>=ga_umbral_mets):
+                df['ckm2'][k]=1
+            if (df[tg][k]>=tg_umbral_mets
+                and (df[tas][k]>=tas_umbral_mets or df[tad][k]>=tad_umbral_mets) 
+                and df[ga][k]>=ga_umbral_mets):
+                df['ckm2'][k]=1
+            # for medicamento in medicamentos:
+            #     if (
+            #         (not pd.isna(df['Medicamento'][k]) and medicamento in df['Medicamento'][k].lower()) or
+            #         (not pd.isna(df['Medicamento.1'][k]) and medicamento in df['Medicamento.1'][k].lower()) or
+            #         (not pd.isna(df['Medicamento.2'][k]) and medicamento in df['Medicamento.2'][k].lower()) or
+            #         (not pd.isna(df['Medicamento.3'][k]) and medicamento in df['Medicamento.3'][k].lower()) or
+            #         (not pd.isna(df['Medicamento.4'][k]) and medicamento in df['Medicamento.4'][k].lower()) or
+            #         (not pd.isna(df['Medicamento.5'][k]) and medicamento in df['Medicamento.5'][k].lower()) or
+            #         (not pd.isna(df['Medicamento.6'][k]) and medicamento in df['Medicamento.6'][k].lower()) or
+            #         (not pd.isna(df['Medicamento.7'][k]) and medicamento in df['Medicamento.7'][k].lower()) or
+            #         (not pd.isna(df['Medicamento.8'][k]) and medicamento in df['Medicamento.8'][k].lower()) or
+            #         (not pd.isna(df['Medicamento.9'][k]) and medicamento in df['Medicamento.9'][k].lower()) or
+            #         (not pd.isna(df['Medicamento.10'][k]) and medicamento in df['Medicamento.10'][k].lower()) or
+            #         (not pd.isna(df['Medicamento.11'][k]) and medicamento in df['Medicamento.11'][k].lower())
+            #     ):
+            #         print("medicamento aparece: ",medicamento)
         return df
 
     def ckm3(df,config):
@@ -452,11 +494,11 @@ class reglas_2024_10_cardiovascular_disease_and_risk_management:
         return df, df_vars_identificadas
 
     #página 8
-    def hipertriglicidemia(df: pd.DataFrame, config, path_variables_ausentes='variables_ausentes.txt'):
+    def hipertrigliceridemia(df: pd.DataFrame, config, path_variables_ausentes='variables_ausentes.txt'):
         tg=config['variables']['analisis_sangre']['tg']['siglas dataset']
-        tg_umbral=config['parametros']['hipertriglicidemia']['tg_umbral']
+        tg_umbral=config['parametros']['hipertrigliceridemia']['tg_umbral']
 
-        df[f'reglas hipertriglicidemia ({tg}>{tg_umbral})'] = 0
+        df[f'reglas hipertrigliceridemia ({tg}>{tg_umbral})'] = 0
 
         missing_vars = set()
         available_vars = []
@@ -477,7 +519,7 @@ class reglas_2024_10_cardiovascular_disease_and_risk_management:
         for k in range(len(df)):
             try:
                 if df[tg][k] >= tg_umbral:
-                    df[f'reglas hipertriglicidemia ({tg}>{tg_umbral})'][k] = 1
+                    df[f'reglas hipertrigliceridemia ({tg}>{tg_umbral})'][k] = 1
             except KeyError as e:
                 print(f"No se encuentra la variable {e} en el dataset.")
 
@@ -525,6 +567,7 @@ class reglas_2024_10_cardiovascular_disease_and_risk_management:
 
     #página 9
     def hipercolesterolemia(df: pd.DataFrame, config, path_variables_ausentes='variables_ausentes.txt'):
+        
         ldl=config['variables']['analisis_sangre']['ldl']['siglas dataset']
         ldl_umbral=config['parametros']['hipercolesterolemia']['ldl_umbral']
 
@@ -558,6 +601,67 @@ class reglas_2024_10_cardiovascular_disease_and_risk_management:
 
         return df, df_vars_identificadas
     
+    #Reglas añadida 21-11-2024
+    def enfermedad_aterosclerotica(df: pd.DataFrame):
+        myocardial_infraction='myocardial infraction'
+        heart_failure='heart failure'
+        cerebrovascular_disease='cerebrovascular disease'
+        peripheral_artery='peripheral artery'
+
+        df['reglas enfermedad aterosclerotica'] = 0
+
+        for k in range(0,len(df)):
+            if (myocardial_infraction in df['Diagnósticos principal'][k].lower() or 
+            myocardial_infraction in df['Diagnósticos asociados'][k].lower() or 
+            myocardial_infraction in df['Diagnósticos asociados.1'][k].lower() or 
+            myocardial_infraction in df['Diagnósticos asociados.2'][k].lower() or 
+            myocardial_infraction in df['Diagnósticos asociados.3'][k].lower() or 
+            myocardial_infraction in df['Diagnósticos asociados.4'][k].lower()):
+                df['reglas enfermedad aterosclerotica'][k] = 1
+            if (heart_failure in df['Diagnósticos principal'][k].lower() or 
+            heart_failure in df['Diagnósticos asociados'][k].lower() or 
+            heart_failure in df['Diagnósticos asociados.1'][k].lower() or 
+            heart_failure in df['Diagnósticos asociados.2'][k].lower() or 
+            heart_failure in df['Diagnósticos asociados.3'][k].lower() or 
+            heart_failure in df['Diagnósticos asociados.4'][k].lower()):
+                df['reglas enfermedad aterosclerotica'][k] = 1
+            if (cerebrovascular_disease in df['Diagnósticos principal'][k].lower() or 
+            cerebrovascular_disease in df['Diagnósticos asociados'][k].lower() or 
+            cerebrovascular_disease in df['Diagnósticos asociados.1'][k].lower() or 
+            cerebrovascular_disease in df['Diagnósticos asociados.2'][k].lower() or 
+            cerebrovascular_disease in df['Diagnósticos asociados.3'][k].lower() or 
+            cerebrovascular_disease in df['Diagnósticos asociados.4'][k].lower()):
+                df['reglas enfermedad aterosclerotica'][k] = 1
+            if (peripheral_artery in df['Diagnósticos principal'][k].lower() or 
+            peripheral_artery in df['Diagnósticos asociados'][k].lower() or 
+            peripheral_artery in df['Diagnósticos asociados.1'][k].lower() or 
+            peripheral_artery in df['Diagnósticos asociados.2'][k].lower() or 
+            peripheral_artery in df['Diagnósticos asociados.3'][k].lower() or 
+            peripheral_artery in df['Diagnósticos asociados.4'][k].lower()):
+                df['reglas enfermedad aterosclerotica'][k] = 1
+        return df
+
+    def factor_riesgo_ASCVD_en_diabetes(df):
+        df['reglas factor riesgo ASCVD en diabetes'] = 0
+                
+        for k in range(0,len(df)):
+            if df['reglas hipertension'][k]==1:
+                df['reglas factor riesgo ASCVD en diabetes'][k] = 1
+            # if df['reglas dislipidemia'][k]==1:   #NO TENEMOS LA REGLA DE DISLIPEMIA
+            #     df['reglas factor riesgo ASCVD en diabetes'][k] = 1
+        return df
+
+    def riesgo_hipertrigliceridemia(df,config):
+        tg=config['variables']['analisis_sangre']['tg']['siglas dataset']
+        tg_umbral=config['parametros']['riesgo_hipertrigliceridemia']['tg_umbral']
+
+        df[f'reglas riesgo hipertrigliceridemia ({tg}>{tg_umbral})'] = 0
+                
+        for k in range(0,len(df)):
+            if df[tg][k]>=tg_umbral:
+                df[f'reglas riesgo hipertrigliceridemia ({tg}>{tg_umbral})'][k] = 1
+        return df
+
     def añadir_reglas(df:pd.DataFrame,config):
         df,_=reglas_2024_10_cardiovascular_disease_and_risk_management.tension_alta(df,config, path_variables_ausentes='variables_ausentes.txt')
         df,_=reglas_2024_10_cardiovascular_disease_and_risk_management.hipertension(df,config, path_variables_ausentes='variables_ausentes.txt')
@@ -574,6 +678,7 @@ class reglas_2024_10_cardiovascular_disease_and_risk_management:
         df,_=reglas_2024_10_cardiovascular_disease_and_risk_management.hipertriglicidemia(df,config, path_variables_ausentes='variables_ausentes.txt')
         df,_=reglas_2024_10_cardiovascular_disease_and_risk_management.baja_lipoproteina_hdl(df,config, path_variables_ausentes='variables_ausentes.txt')
         df,_=reglas_2024_10_cardiovascular_disease_and_risk_management.hipercolesterolemia(df,config, path_variables_ausentes='variables_ausentes.txt')
+        df=reglas_2024_10_cardiovascular_disease_and_risk_management.enfermedad_aterosclerotica(df)
 
         return df
 
@@ -618,6 +723,7 @@ class reglas_2024_2_diagnosis_and_classification_of_diabetis:
         df_vars_identificadas = df[available_vars]
         
         return df, df_vars_identificadas
+
 
     # en la página 2
     def diabetes(df: pd.DataFrame, config, path_variables_ausentes='variables_ausentes.txt'):
@@ -1556,7 +1662,60 @@ for diagnosis in frequencies.head(num_variables)['Diagnóstico']:
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         key=f"diagnostico_principal_{diagnosis}"
     )
+#######################
+# Asumiendo que df_crudo es tu DataFrame
 
+# Contar las frecuencias de cada diagnóstico principal
+frequencies = df_crudo['Diagnósticos principal'].value_counts().reset_index()
+frequencies.columns = ['Diagnóstico principal', 'Frecuencia principal']
+
+# Extraer las columnas de diagnósticos asociados
+assoc_diags = df_crudo[['Diagnósticos asociados', 'Diagnósticos asociados.1', 'Diagnósticos asociados.2', 'Diagnósticos asociados.3', 'Diagnósticos asociados.4']]
+
+# Fusionar el diagnóstico principal con sus asociados
+assoc_diags = pd.concat([df_crudo['Diagnósticos principal'], assoc_diags], axis=1)
+
+# Crear un DataFrame para almacenar los resultados
+associated_frequencies = pd.DataFrame()
+
+# Calcular las frecuencias de los diagnósticos asociados para cada diagnóstico principal
+for diag in frequencies['Diagnóstico principal']:
+    # Filtrar los diagnósticos asociados para cada diagnóstico principal
+    temp = assoc_diags[assoc_diags['Diagnósticos principal'] == diag].melt(id_vars=['Diagnósticos principal'], value_vars=assoc_diags.columns[1:])
+    temp = temp['value'].value_counts().reset_index()
+    temp.columns = ['Diagnóstico Asociado', 'Frecuencia Asociada']
+    temp['Diagnóstico Principal'] = diag
+    associated_frequencies = pd.concat([associated_frequencies, temp])
+
+# Selección de cuántos diagnósticos principales mostrar
+# num_principales = st.slider(
+#     "Selecciona cuántos diagnósticos principales ver",
+#     min_value=1,
+#     max_value=30,
+#     value=5
+# )
+
+# Selección de cuántos diagnósticos asociados mostrar
+num_asociados = st.slider(
+    "Selecciona cuántos diagnósticos asociados ver por cada diagnóstico principal",
+    min_value=1,
+    max_value=30,
+    value=5,
+    key='slider_asociados'
+)
+
+# Mostrar la tabla con los diagnósticos principales más frecuentes
+# st.table(frequencies.head(num_principales))
+
+# Agregar una sección para explorar los diagnósticos asociados
+diag_principal = st.selectbox(
+    "Selecciona un diagnóstico principal para ver sus asociados más frecuentes",
+    frequencies['Diagnóstico principal']
+)
+
+# Filtrar y mostrar los diagnósticos asociados más frecuentes para el diagnóstico principal seleccionado
+st.table(associated_frequencies[associated_frequencies['Diagnóstico Principal'] == diag_principal][['Diagnóstico Asociado', 'Frecuencia Asociada']].head(num_asociados))
+#######################
 # Filtrar columnas que contienen "Diagnósticos asociados"
 associated_columns = [col for col in df_crudo.columns if "Diagnósticos asociados" in col]
 
@@ -1688,23 +1847,20 @@ for recomendaciones in frequencies.head(num_variables)['Recomendaciones nutricio
     )
 
 
+st.title('Procesamiento de datos')
+
+
 def convert_df_to_bytes(df_str):
     """
     Convierte el string de un CSV a un formato adecuado para la descarga en Streamlit.
     """
     return BytesIO(df_str.encode())
 
-# st.write("Vuelve a cargar los Historiales Clínicos Electrónicos en formato csv con el separador ';'. (Cargar el archivo LABELS)")
-# uploaded_file = st.file_uploader("Elige un archivo CSV", type="csv")
 
-# if uploaded_file is not None:
-#     # Para leer el archivo CSV
-#     df = pd.read_csv(uploaded_file,sep=';')
-#     # Mostrar el dataframe en la aplicación
-# else:
-#     st.write("Por favor, carga un archivo CSV.")
-
+# config_path='/home/eatitall_scripts/definir_reglas/config.json'
 config_path='config.json'
+
+
 
 with open(config_path, 'r') as archivo:
     config = json.load(archivo)
