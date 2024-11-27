@@ -1909,6 +1909,51 @@ for recomendaciones in frequencies.head(num_variables)['Recomendaciones nutricio
         key=f"{recomendaciones}"
     )
 
+st.title('Correlación')
+# Mostrar la lista de variables
+st.write(f"El dataset tiene {df_crudo.shape[1]} variables y {df_crudo.shape[0]} registros.")
+
+# Selección de variables a analizar
+variables_disponibles = df_crudo.select_dtypes(include=[np.number]).columns[
+    (df_crudo.select_dtypes(include=[np.number]).notna().any()) & 
+    (df_crudo.select_dtypes(include=[np.number]).nunique() > 1)
+].tolist()
+
+st.write(f"Hay {len(variables_disponibles)} variables numéricas disponibles.")
+selected_variables = st.multiselect(
+    "Selecciona las variables para calcular la correlación (máximo 30 variables para mejor visualización):",
+    variables_disponibles,
+    default=variables_disponibles[-10:]
+)
+
+if selected_variables:
+    # Calcular la matriz de correlación
+    corr_matrix = df_crudo[selected_variables].corr()
+
+    # Visualizar la matriz de correlación con un heatmap
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(
+        corr_matrix,
+        annot=True,
+        fmt=".2f",
+        cmap="coolwarm",
+        cbar=True,
+        square=True,
+        linewidths=0.5
+    )
+    plt.title("Matriz de Correlación")
+    st.pyplot(plt.gcf())
+
+    # Descargar la matriz de correlación como CSV
+    csv = corr_matrix.to_csv(index=True)
+    st.download_button(
+        label="Descargar Matriz de Correlación como CSV",
+        data=csv,
+        file_name="matriz_correlacion.csv",
+        mime="text/csv"
+    )
+else:
+    st.write("Selecciona al menos una variable para calcular la correlación.")
 
 st.title('Procesamiento de datos')
 
