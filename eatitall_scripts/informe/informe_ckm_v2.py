@@ -19,8 +19,10 @@ from itertools import combinations
 
 from scipy.cluster.hierarchy import linkage, fcluster
 from collections import defaultdict
-
+import seaborn as sns
 import sys
+from scipy.stats import chi2_contingency
+
 
 
 class ckm:
@@ -1567,10 +1569,26 @@ class extraccion_entidades:
                     {
                         'role': 'user',
                         'content': f"""
-                        Eres un modelo experto en la extracción de entidades relacionadas con características nutricionales a partir de historiales clínicos electrónicos. Tu tarea es, dado un conjunto de características y una frase, identificar todas las características relevantes mencionadas en dicha frase. El output debe estar en formato de lista de python "[]", separando las categorías por comas. Si en el texto no identificas nignuna de las categorías de la lista, NO te inventes categorías, en su lugar deja una lista vacía: [].
-                        A continuación, te proporcionaré un listado de categorías y las palabras clave o descripción que pertenecen a cada una de ellas en el fromato "categoría:descripción". El nombre de cada categoría, formado por palabras separadas por guiones bajos, también es una indicación de su contenido:
+                        Eres un modelo experto en la extracción de entidades relacionadas con características nutricionales a partir de historiales clínicos electrónicos. Tu tarea es, dado un conjunto de categorías y una frase, identificar todas las categorías relevantes mencionadas en dicha frase. El output debe estar en formato de lista de python "[]", separando las categorías por comas. Si en el texto no identificas nignuna de las categorías de la lista, NO te inventes categorías, en su lugar deja una lista vacía: [].
+                        A continuación, te proporcionaré un listado de categorías y las palabras clave o descripción que pertenecen a cada categoría en el fromato "categoría:descripción". El nombre de cada categoría también es una indicación de su contenido:
                         {categorias}.
                         En tu respuesta dame solo las categorías, no me des las descripciones.
+                        Antes de darte la frase que debes analizar, voy a darte cinco ejemplos:
+                        Ejemplo 1: 
+                        - Frase: Dieta rica en lácteos 
+                        - Salida esperada: ["proteína AVB"]
+                        Ejemplo 2:
+                        - Frase: Dieta hiposódica y sin grasa
+                        - Salida esperada: ["muy hiposódica", "baja en grasas", "baja en AGS"]
+                        Ejemplo 3: 
+                        - Frase: Dieta rica en fruta, verdura, legumbres y pescado. Reducir las carnes rojas. Utilizará aceite de oliva virgen extra para cocinar y condimentar. Evitará alimentos precocinados y "comida rápida"
+                        - Salida esperada: ["Rica en fibra 25-30", "Baja en AGS", "aumentar AGIS"]
+                        Ejemplo 4:
+                        - Frase: Dieta baja en grasas 
+                        - Salida esperada: ["baja en grasas"]
+                        Ejemplo 5: 
+                        - Frase: Dieta diabética sin sal 
+                        - Salida esperada: ["muy hiposódica"]
                         Esta es la frase que debes analizar:{frase}
                         Esta es la respuesta:
                         [
@@ -1663,8 +1681,6 @@ for diagnosis in frequencies.head(num_variables)['Diagnóstico']:
         key=f"diagnostico_principal_{diagnosis}"
     )
 #######################
-# Asumiendo que df_crudo es tu DataFrame
-
 # Contar las frecuencias de cada diagnóstico principal
 frequencies = df_crudo['Diagnósticos principal'].value_counts().reset_index()
 frequencies.columns = ['Diagnóstico principal', 'Frecuencia principal']
@@ -1687,13 +1703,6 @@ for diag in frequencies['Diagnóstico principal']:
     temp['Diagnóstico Principal'] = diag
     associated_frequencies = pd.concat([associated_frequencies, temp])
 
-# Selección de cuántos diagnósticos principales mostrar
-# num_principales = st.slider(
-#     "Selecciona cuántos diagnósticos principales ver",
-#     min_value=1,
-#     max_value=30,
-#     value=5
-# )
 
 # Selección de cuántos diagnósticos asociados mostrar
 num_asociados = st.slider(
@@ -1715,6 +1724,69 @@ diag_principal = st.selectbox(
 
 # Filtrar y mostrar los diagnósticos asociados más frecuentes para el diagnóstico principal seleccionado
 st.table(associated_frequencies[associated_frequencies['Diagnóstico Principal'] == diag_principal][['Diagnóstico Asociado', 'Frecuencia Asociada']].head(num_asociados))
+#######################
+# Función para extraer etiquetas del texto libre en la columna "Consejo dietético"
+def extraer_etiqueta(texto):
+    if pd.isna(texto):
+        return ""  # Manejar valores NaN
+    import re
+    match = re.search(r'-(.*?)\-', texto)
+    return match.group(1).strip() if match else ""
+
+st.write("Frecuencias de Consejos Nutricionales por Diagnóstico Principal")
+
+# Asumiendo que df_crudo es tu DataFrame
+# df_crudo = pd.read_csv("tu_archivo.csv")  # Cargar el DataFrame si es necesario
+
+# Extraer etiquetas de la columna "Consejo dietético"
+df_crudo['Etiqueta'] = df_crudo['Consejo dietético'].apply(extraer_etiqueta)
+
+# Contar las frecuencias de cada diagnóstico principal
+frequencies = df_crudo['Diagnósticos principal'].value_counts().reset_index()
+frequencies.columns = ['Diagnóstico principal', 'Frecuencia principal']
+
+# Crear un DataFrame para almacenar los resultados cruzados
+diet_frequencies = pd.DataFrame()
+
+# Calcular las frecuencias de las etiquetas para cada diagnóstico principal
+for diag in frequencies['Diagnóstico principal']:
+    # Filtrar las etiquetas para cada diagnóstico principal
+    temp = df_crudo[df_crudo['Diagnósticos principal'] == diag]['Etiqueta'].value_counts().reset_index()
+    temp.columns = ['Etiqueta', 'Frecuencia']
+    temp['Diagnóstico Principal'] = diag
+    diet_frequencies = pd.concat([diet_frequencies, temp])
+
+# Selección de cuántos diagnósticos principales mostrar
+# num_principales = st.slider(
+#     "Selecciona cuántos diagnósticos principales ver",
+#     min_value=1,
+#     max_value=min(len(frequencies), 30),
+#     value=5
+# )
+
+# Selección de cuántas etiquetas mostrar
+num_etiquetas = st.slider(
+    "Selecciona cuántas etiquetas ver por cada diagnóstico principal",
+    min_value=1,
+    max_value=30,
+    value=5,
+    key='slider_etiquetas'
+)
+
+# Mostrar la tabla con los diagnósticos principales más frecuentes
+# st.table(frequencies.head(num_principales))
+
+# Agregar una sección para explorar las etiquetas asociadas
+diag_principal = st.selectbox(
+    "Selecciona un diagnóstico principal para ver sus etiquetas más frecuentes",
+    frequencies['Diagnóstico principal']
+)
+
+# Filtrar y mostrar las etiquetas más frecuentes para el diagnóstico principal seleccionado
+st.table(
+    diet_frequencies[diet_frequencies['Diagnóstico Principal'] == diag_principal][['Etiqueta', 'Frecuencia']].head(num_etiquetas)
+) 
+
 #######################
 # Filtrar columnas que contienen "Diagnósticos asociados"
 associated_columns = [col for col in df_crudo.columns if "Diagnósticos asociados" in col]
@@ -1845,6 +1917,116 @@ for recomendaciones in frequencies.head(num_variables)['Recomendaciones nutricio
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         key=f"{recomendaciones}"
     )
+
+
+st.title('Correlación')
+# Mostrar la lista de variables
+st.write(f"El dataset tiene {df_crudo.shape[1]} variables y {df_crudo.shape[0]} registros.")
+
+# Selección de variables a analizar
+variables_disponibles = df_crudo.select_dtypes(include=[np.number]).columns[
+    (df_crudo.select_dtypes(include=[np.number]).notna().any()) & 
+    (df_crudo.select_dtypes(include=[np.number]).nunique() > 1)
+].tolist()
+
+st.write(f"Hay {len(variables_disponibles)} variables numéricas disponibles.")
+selected_variables = st.multiselect(
+    "Selecciona las variables para calcular la correlación (máximo 30 variables para mejor visualización):",
+    variables_disponibles,
+    default=variables_disponibles[-10:]
+)
+
+if selected_variables:
+    # Calcular la matriz de correlación
+    corr_matrix = df_crudo[selected_variables].corr()
+
+    # Visualizar la matriz de correlación con un heatmap
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(
+        corr_matrix,
+        annot=True,
+        fmt=".2f",
+        cmap="coolwarm",
+        cbar=True,
+        square=True,
+        linewidths=0.5
+    )
+    plt.title("Matriz de Correlación")
+    st.pyplot(plt.gcf())
+
+    # Descargar la matriz de correlación como CSV
+    csv = corr_matrix.to_csv(index=True)
+    st.download_button(
+        label="Descargar Matriz de Correlación como CSV",
+        data=csv,
+        file_name="matriz_correlacion.csv",
+        mime="text/csv"
+    )
+else:
+    st.write("Selecciona al menos una variable para calcular la correlación.")
+
+st.title("Análisis de Dependencia entre Variables Categóricas (Chi-cuadrado)")
+
+# Cargar el dataset
+# df_crudo = pd.read_csv("tu_archivo.csv")  # Cargar el DataFrame si es necesario
+
+# Filtrar variables categóricas que no están completamente llenas de NaNs y tienen más de un valor único
+categorical_variables = df_crudo.select_dtypes(include=['object', 'category']).columns[
+    (df_crudo.select_dtypes(include=['object', 'category']).notna().any()) &
+    (df_crudo.select_dtypes(include=['object', 'category']).nunique() > 1)
+].tolist()
+
+st.write(f"El dataset tiene {len(categorical_variables)} variables categóricas relevantes.")
+
+# Selección de variables para el análisis
+selected_variables = st.multiselect(
+    "Selecciona las variables categóricas para realizar el análisis de Chi-cuadrado:",
+    categorical_variables,
+    default=categorical_variables[:2]  # Seleccionar las primeras dos variables como ejemplo
+)
+
+if len(selected_variables) >= 2:
+    # Realizar el análisis de Chi-cuadrado para cada par de variables
+    results = []
+    for i in range(len(selected_variables)):
+        for j in range(i + 1, len(selected_variables)):
+            var1 = selected_variables[i]
+            var2 = selected_variables[j]
+
+            # Crear tabla de contingencia
+            contingency_table = pd.crosstab(df_crudo[var1], df_crudo[var2])
+
+            # Calcular Chi-cuadrado
+            chi2, p, dof, _ = chi2_contingency(contingency_table)
+
+            # Guardar resultados
+            results.append({
+                "Variable 1": var1,
+                "Variable 2": var2,
+                "Chi-cuadrado": chi2,
+                "p-valor": p,
+                "Grados de libertad": dof
+            })
+
+    # Convertir resultados en DataFrame
+    chi2_results = pd.DataFrame(results)
+
+    # Mostrar tabla de resultados
+    st.write("Resultados del análisis de Chi-cuadrado:")
+    st.dataframe(chi2_results)
+
+    # Descargar los resultados
+    csv = chi2_results.to_csv(index=False)
+    st.download_button(
+        label="Descargar resultados como CSV",
+        data=csv,
+        file_name="chi2_results.csv",
+        mime="text/csv"
+    )
+
+else:
+    st.write("Selecciona al menos dos variables para realizar el análisis de Chi-cuadrado.")
+
 
 
 st.title('Procesamiento de datos')
