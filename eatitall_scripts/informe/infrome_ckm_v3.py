@@ -1715,6 +1715,69 @@ diag_principal = st.selectbox(
 
 # Filtrar y mostrar los diagnósticos asociados más frecuentes para el diagnóstico principal seleccionado
 st.table(associated_frequencies[associated_frequencies['Diagnóstico Principal'] == diag_principal][['Diagnóstico Asociado', 'Frecuencia Asociada']].head(num_asociados))
+# Función para extraer etiquetas del texto libre en la columna "Consejo dietético"
+def extraer_etiqueta(texto):
+    if pd.isna(texto):
+        return ""  # Manejar valores NaN
+    import re
+    match = re.search(r'-(.*?)\-', texto)
+    return match.group(1).strip() if match else ""
+
+st.write("Frecuencias de Consejos Nutricionales por Diagnóstico Principal")
+
+# Asumiendo que df_crudo es tu DataFrame
+# df_crudo = pd.read_csv("tu_archivo.csv")  # Cargar el DataFrame si es necesario
+
+# Extraer etiquetas de la columna "Consejo dietético"
+df_crudo['Etiqueta'] = df_crudo['Consejo dietético'].apply(extraer_etiqueta)
+
+# Contar las frecuencias de cada diagnóstico principal
+frequencies = df_crudo['Diagnósticos principal'].value_counts().reset_index()
+frequencies.columns = ['Diagnóstico principal', 'Frecuencia principal']
+
+# Crear un DataFrame para almacenar los resultados cruzados
+diet_frequencies = pd.DataFrame()
+
+# Calcular las frecuencias de las etiquetas para cada diagnóstico principal
+for diag in frequencies['Diagnóstico principal']:
+    # Filtrar las etiquetas para cada diagnóstico principal
+    temp = df_crudo[df_crudo['Diagnósticos principal'] == diag]['Etiqueta'].value_counts().reset_index()
+    temp.columns = ['Etiqueta', 'Frecuencia']
+    temp['Diagnóstico Principal'] = diag
+    diet_frequencies = pd.concat([diet_frequencies, temp])
+
+# Selección de cuántos diagnósticos principales mostrar
+# num_principales = st.slider(
+#     "Selecciona cuántos diagnósticos principales ver",
+#     min_value=1,
+#     max_value=min(len(frequencies), 30),
+#     value=5
+# )
+
+# Selección de cuántas etiquetas mostrar
+num_etiquetas = st.slider(
+    "Selecciona cuántas etiquetas ver por cada diagnóstico principal",
+    min_value=1,
+    max_value=30,
+    value=5,
+    key='slider_etiquetas'
+)
+
+# Mostrar la tabla con los diagnósticos principales más frecuentes
+# st.table(frequencies.head(num_principales))
+
+# Agregar una sección para explorar las etiquetas asociadas
+diag_principal = st.selectbox(
+    "Selecciona un diagnóstico principal para ver sus etiquetas más frecuentes",
+    frequencies['Diagnóstico principal']
+)
+
+# Filtrar y mostrar las etiquetas más frecuentes para el diagnóstico principal seleccionado
+st.table(
+    diet_frequencies[diet_frequencies['Diagnóstico Principal'] == diag_principal][['Etiqueta', 'Frecuencia']].head(num_etiquetas)
+) 
+
+
 #######################
 # Filtrar columnas que contienen "Diagnósticos asociados"
 associated_columns = [col for col in df_crudo.columns if "Diagnósticos asociados" in col]
