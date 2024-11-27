@@ -2020,6 +2020,61 @@ else:
     st.write("Selecciona al menos dos variables para realizar el análisis de Chi-cuadrado.")
 
 
+
+st.title("Frecuencia de Variables Categóricas por Estadio Sd CaReMe")
+
+# Asumiendo que df es tu DataFrame ya cargado
+# df = pd.read_csv("tu_archivo.csv")  # Cargar el DataFrame si es necesario
+
+# Definir las variables categóricas a analizar
+categorical_variables = [
+    "Complicaciones oftálmicas",
+    "Neuropatía",
+    "Arteriopatía periférica",
+    "Cardiopatía isquémica",
+    "Insuficiencia cardiaca",
+    "Insulin dependiente",
+    "Desnutrición",
+    "Trastornos pancreáticos"
+]
+
+# Asegurarse de que todas las variables categóricas estén en el DataFrame
+missing_vars = [var for var in categorical_variables if var not in df.columns]
+if missing_vars:
+    st.error(f"Las siguientes variables no están en el DataFrame: {', '.join(missing_vars)}")
+else:
+    # Crear una tabla de frecuencias para cada valor de "Estadio Sd CaReMe"
+    estadio_values = df["Estadio Sd CaReMe"].dropna().unique()
+    results = []
+
+    for estadio in estadio_values:
+        subset = df[df["Estadio Sd CaReMe"] == estadio]
+        for var in categorical_variables:
+            freq = subset[var].value_counts(normalize=True) * 100
+            results.append({
+                "Estadio Sd CaReMe": estadio,
+                "Variable": var,
+                "Sí (%)": freq.get("Sí", 0),
+                "No (%)": freq.get("No", 0)
+            })
+
+    # Convertir los resultados a un DataFrame
+    freq_table = pd.DataFrame(results)
+
+    # Mostrar la tabla en Streamlit
+    st.write("Frecuencia de variables categóricas por estadio:")
+    st.dataframe(freq_table)
+
+    # Permitir descargar la tabla como CSV
+    csv = freq_table.to_csv(index=False)
+    st.download_button(
+        label="Descargar resultados como CSV",
+        data=csv,
+        file_name="frecuencias_por_estadio.csv",
+        mime="text/csv"
+    )
+
+
 # st.title('Procesamiento de datos')
 
 
