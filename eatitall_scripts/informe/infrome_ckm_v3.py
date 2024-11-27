@@ -22,7 +22,7 @@ from collections import defaultdict
 import seaborn as sns
 import sys
 
-
+from scipy.stats import chi2_contingency
 class ckm:
     def añadir_ckms(df,config):
         df=ckm.ckm1(df,config)
@@ -1955,7 +1955,72 @@ if selected_variables:
 else:
     st.write("Selecciona al menos una variable para calcular la correlación.")
 
-st.title('Procesamiento de datos')
+
+
+st.title("Análisis de Dependencia entre Variables Categóricas (Chi-cuadrado)")
+
+# Cargar el dataset
+# df_crudo = pd.read_csv("tu_archivo.csv")  # Cargar el DataFrame si es necesario
+
+# Filtrar variables categóricas que no están completamente llenas de NaNs y tienen más de un valor único
+categorical_variables = df_crudo.select_dtypes(include=['object', 'category']).columns[
+    (df_crudo.select_dtypes(include=['object', 'category']).notna().any()) &
+    (df_crudo.select_dtypes(include=['object', 'category']).nunique() > 1)
+].tolist()
+
+st.write(f"El dataset tiene {len(categorical_variables)} variables categóricas relevantes.")
+
+# Selección de variables para el análisis
+selected_variables = st.multiselect(
+    "Selecciona las variables categóricas para realizar el análisis de Chi-cuadrado:",
+    categorical_variables,
+    default=categorical_variables[:2]  # Seleccionar las primeras dos variables como ejemplo
+)
+
+if len(selected_variables) >= 2:
+    # Realizar el análisis de Chi-cuadrado para cada par de variables
+    results = []
+    for i in range(len(selected_variables)):
+        for j in range(i + 1, len(selected_variables)):
+            var1 = selected_variables[i]
+            var2 = selected_variables[j]
+
+            # Crear tabla de contingencia
+            contingency_table = pd.crosstab(df_crudo[var1], df_crudo[var2])
+
+            # Calcular Chi-cuadrado
+            chi2, p, dof, _ = chi2_contingency(contingency_table)
+
+            # Guardar resultados
+            results.append({
+                "Variable 1": var1,
+                "Variable 2": var2,
+                "Chi-cuadrado": chi2,
+                "p-valor": p,
+                "Grados de libertad": dof
+            })
+
+    # Convertir resultados en DataFrame
+    chi2_results = pd.DataFrame(results)
+
+    # Mostrar tabla de resultados
+    st.write("Resultados del análisis de Chi-cuadrado:")
+    st.dataframe(chi2_results)
+
+    # Descargar los resultados
+    csv = chi2_results.to_csv(index=False)
+    st.download_button(
+        label="Descargar resultados como CSV",
+        data=csv,
+        file_name="chi2_results.csv",
+        mime="text/csv"
+    )
+
+else:
+    st.write("Selecciona al menos dos variables para realizar el análisis de Chi-cuadrado.")
+
+
+# st.title('Procesamiento de datos')
 
 
 def convert_df_to_bytes(df_str):
