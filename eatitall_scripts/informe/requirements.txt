@@ -3,3 +3,4 @@ ollama
 matplotlib
 scikit-learn
 XlsxWriter
+seaborn
