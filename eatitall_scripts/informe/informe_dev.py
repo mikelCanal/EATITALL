@@ -2028,6 +2028,190 @@ else:
     st.write("Selecciona al menos dos variables para realizar el análisis de Chi-cuadrado.")
 
 
+st.title("Distribución de Valores de 'IC tipo' y 'Otras ECV' por Estadio Sd CaReMe")
+
+# Asumiendo que df es tu DataFrame ya cargado
+# df = pd.read_csv("tu_archivo.csv")  # Cargar el DataFrame si es necesario
+
+# Verificar si las columnas necesarias existen en el DataFrame
+required_columns = ["Estadio Sd CaReMe", "IC tipo", "Otras ECV"]
+missing_columns = [col for col in required_columns if col not in df.columns]
+
+if missing_columns:
+    st.error(f"Las siguientes columnas no están en el DataFrame: {', '.join(missing_columns)}")
+else:
+    # Lista para guardar los resultados
+    results = []
+
+    # Iterar por cada valor de "Estadio Sd CaReMe"
+    estadio_values = df["Estadio Sd CaReMe"].dropna().unique()
+
+    for estadio in estadio_values:
+        subset = df[df["Estadio Sd CaReMe"] == estadio]
+        
+        for col in ["IC tipo", "Otras ECV"]:
+            # Calcular la distribución porcentual de los valores únicos
+            freq = subset[col].value_counts(normalize=True) * 100
+            
+            for value, percentage in freq.items():
+                results.append({
+                    "Estadio Sd CaReMe": estadio,
+                    "Variable": col,
+                    "Valor": value,
+                    "Porcentaje (%)": percentage
+                })
+
+    # Convertir los resultados a un DataFrame
+    freq_table = pd.DataFrame(results)
+
+    # Mostrar la tabla en Streamlit
+    st.write("Distribución de valores por estadio:")
+    st.dataframe(freq_table)
+
+    # Descargar la tabla como CSV
+    csv = freq_table.to_csv(index=False)
+    st.download_button(
+        label="Descargar resultados como CSV",
+        data=csv,
+        file_name="distribucion_ic_tipo_otras_ecv.csv",
+        mime="text/csv"
+    )
+
+st.title("Análisis de Asociación Multidimensional con Chi-cuadrado y Cramér’s V")
+
+# Asumiendo que df es tu DataFrame ya cargado
+# df = pd.read_csv("tu_archivo.csv")  # Cargar el DataFrame si es necesario
+
+# Definir las variables categóricas a analizar
+variables = [
+    "Complicaciones oftálmicas",
+    "Neuropatía",
+    "Arteriopatía periférica",
+    "Cardiopatía isquémica",
+    "Insuficiencia cardiaca",
+    "Insulin dependiente",
+    "Desnutrición",
+    "Trastornos pancreáticos",
+    "IC tipo",
+    "Otras ECV"
+]
+
+# Verificar que las variables estén presentes en el DataFrame
+missing_vars = [var for var in variables if var not in df.columns]
+if missing_vars:
+    st.error(f"Las siguientes variables no están en el DataFrame: {', '.join(missing_vars)}")
+else:
+    # Crear una lista para almacenar los resultados
+    results = []
+
+    # Realizar Chi-cuadrado para cada par de variables
+    for i in range(len(variables)):
+        for j in range(i + 1, len(variables)):
+            var1 = variables[i]
+            var2 = variables[j]
+
+            # Crear tabla de contingencia
+            contingency_table = pd.crosstab(df[var1], df[var2])
+
+            # Calcular Chi-cuadrado
+            chi2, p, dof, _ = chi2_contingency(contingency_table)
+
+            # Calcular el coeficiente de Cramér's V
+            n = contingency_table.sum().sum()  # Total de observaciones
+            cramers_v = np.sqrt(chi2 / (n * (min(contingency_table.shape) - 1)))
+
+            # Almacenar los resultados
+            results.append({
+                "Variable 1": var1,
+                "Variable 2": var2,
+                "Chi-cuadrado": chi2,
+                "p-valor": p,
+                "Grados de libertad": dof,
+                "Cramér’s V": cramers_v
+            })
+
+    # Convertir los resultados a un DataFrame
+    association_results = pd.DataFrame(results)
+
+    # Mostrar los resultados en Streamlit
+    st.write("Resultados de Chi-cuadrado y Cramér’s V:")
+    st.dataframe(association_results)
+
+    # Permitir descargar los resultados como CSV
+    csv = association_results.to_csv(index=False)
+    st.download_button(
+        label="Descargar resultados como CSV",
+        data=csv,
+        file_name="chi2_cramers_results.csv",
+        mime="text/csv"
+    )
+st.title("Análisis de Relación entre 'Estadio Sd CaReMe' y Variables Numéricas")
+
+# Asumiendo que df es tu DataFrame ya cargado
+# df = pd.read_csv("tu_archivo.csv")  # Cargar el DataFrame si es necesario
+
+# Verificar que la variable categórica esté en el DataFrame
+if "Estadio Sd CaReMe" not in df.columns:
+    st.error("La variable 'Estadio Sd CaReMe' no está presente en el DataFrame.")
+else:
+    # Filtrar variables numéricas que tengan más de un valor único y no estén completamente llenas de NaNs
+    numerical_variables = df.select_dtypes(include=[np.number]).columns[
+        (df.select_dtypes(include=[np.number]).nunique() > 1) &
+        (df.select_dtypes(include=[np.number]).notna().any())
+    ].tolist()
+
+    # Excluir 'Record ID' de las variables numéricas
+    if 'Record ID' in numerical_variables:
+        numerical_variables.remove('Record ID')
+
+    st.write(f"Variables numéricas seleccionadas: {', '.join(numerical_variables)}")
+
+    # Lista para almacenar los resultados
+    results = []
+
+    for var in numerical_variables:
+        # Filtrar los datos eliminando NaN en la variable actual
+        data = df[["Estadio Sd CaReMe", var]].dropna()
+
+        # Agrupar los datos por cada valor único de 'Estadio Sd CaReMe'
+        unique_groups = data["Estadio Sd CaReMe"].unique()
+        group_data = [data[data["Estadio Sd CaReMe"] == group][var] for group in unique_groups]
+
+        # Calcular el coeficiente de eta²
+        overall_mean = data[var].mean()
+        ss_between = sum(len(group) * (group.mean() - overall_mean) ** 2 for group in group_data)
+        ss_total = sum((data[var] - overall_mean) ** 2)
+        eta_squared = ss_between / ss_total
+
+        # Guardar resultados
+        results.append({
+            "Variable": var,
+            "Eta Squared (η²)": eta_squared
+        })
+
+        # Generar boxplot
+        plt.figure(figsize=(8, 6))
+        data.boxplot(column=var, by="Estadio Sd CaReMe", grid=False)
+        plt.title(f"Distribución de '{var}' por Estadio Sd CaReMe")
+        plt.suptitle("")  # Eliminar título por defecto de Pandas
+        plt.xlabel("Estadio Sd CaReMe")
+        plt.ylabel(var)
+        st.pyplot(plt.gcf())
+        plt.close()
+
+    # Mostrar resultados en tabla
+    results_df = pd.DataFrame(results)
+    st.write("Resultados del análisis de correlación (Eta Squared):")
+    st.dataframe(results_df)
+
+    # Descargar resultados como CSV
+    csv = results_df.to_csv(index=False)
+    st.download_button(
+        label="Descargar resultados como CSV",
+        data=csv,
+        file_name="relacion_estadio_numericas_eta_squared.csv",
+        mime="text/csv"
+    )
 
 st.title('Procesamiento de datos')
 
