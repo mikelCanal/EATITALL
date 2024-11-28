@@ -2261,6 +2261,63 @@ else:
         mime="text/csv"
     )
 
+st.title("Análisis de Relación entre 'Estadio Sd CaReMe' y Variables Categóricas")
+
+# Asumiendo que df es tu DataFrame ya cargado
+# df = pd.read_csv("tu_archivo.csv")  # Cargar el DataFrame si es necesario
+
+# Verificar que la variable categórica esté en el DataFrame
+if "Estadio Sd CaReMe" not in df.columns:
+    st.error("La variable 'Estadio Sd CaReMe' no está presente en el DataFrame.")
+else:
+    # Filtrar variables categóricas relevantes
+    categorical_variables = df.select_dtypes(include=['object', 'category']).columns.tolist()
+    categorical_variables.remove("Estadio Sd CaReMe")  # Excluir la variable objetivo de análisis
+
+    # st.write(f"Variables categóricas seleccionadas: {', '.join(categorical_variables)}")
+
+    # Asegurarse de que 'Estadio Sd CaReMe' es categórica
+    df["Estadio Sd CaReMe"] = df["Estadio Sd CaReMe"].astype("category")
+
+    # Lista para almacenar los resultados
+    results = []
+
+    for var in categorical_variables:
+        # Eliminar filas con NaN en la variable categórica
+        filtered_data = df[["Estadio Sd CaReMe", var]].dropna()
+
+        # Crear tabla de contingencia
+        contingency_table = pd.crosstab(filtered_data["Estadio Sd CaReMe"], filtered_data[var])
+
+        # Calcular Chi-cuadrado
+        chi2, p_value, dof, _ = chi2_contingency(contingency_table)
+
+        # Calcular Cramér's V
+        n = contingency_table.sum().sum()  # Total de observaciones
+        cramers_v = np.sqrt(chi2 / (n * (min(contingency_table.shape) - 1)))
+
+        # Guardar resultados
+        results.append({
+            "Variable": var,
+            "Chi-cuadrado": chi2,
+            "p-Value": p_value,
+            "Cramér’s V": cramers_v
+        })
+
+    # Mostrar resultados en tabla
+    results_df = pd.DataFrame(results)
+    st.write("Resultados del análisis de Chi-cuadrado y Cramér’s V:")
+    st.dataframe(results_df)
+
+    # Descargar resultados como CSV
+    csv = results_df.to_csv(index=False)
+    st.download_button(
+        label="Descargar resultados como CSV",
+        data=csv,
+        file_name="relacion_estadio_categoricas.csv",
+        mime="text/csv"
+    )
+
 
 # st.title('Procesamiento de datos')
 
